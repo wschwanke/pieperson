@@ -1,0 +1,83 @@
+{
+  "name": "Example",
+  "version": "1.0.0",
+  "description": "",
+  "main": "/server/server.js",
+  "scripts": {
+    "watch": "webpack-dev-server --color --progress -w",
+    "indexer": "nodemon --trace-warnings ./indexer",
+    "build": "webpack --color --progress",
+    "build:production": "webpack --color --progress -p",
+    "start": "nodemon --trace-warnings ./server/bin/www",
+    "https": "nodemon --trace-warnings --https ./server/bin/www",
+    "test": "mocha ./**/*.test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "local"
+  },
+  "keywords": [
+    "pie"
+  ],
+  "author": "Will Schwanke",
+  "license": "MIT",
+  "nodemonConfig": {
+    "verbose": "true",
+    "watch": "server"
+  },
+  "engines": {
+    "node": "8.4.0"
+  },
+  "dependencies": {
+    "autoprefixer": "^7.1.4",
+    "axios": "^0.17.1",
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.1",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-react": "^6.24.1",
+    "body-parser": "^1.17.2",
+    "bootstrap": "^4.0.0",
+    "cache-loader": "^1.1.0",
+    "chai": "^4.1.1",
+    "clean-webpack-plugin": "^0.1.16",
+    "cookie-parser": "^1.4.3",
+    "copy-webpack-plugin": "^4.1.1",
+    "css-loader": "^0.28.7",
+    "cssnano": "^3.10.0",
+    "dotenv": "^4.0.0",
+    "electron": "^1.7.12",
+    "enzyme": "^3.3.0",
+    "express": "^4.16.2",
+    "express-session": "^1.15.6",
+    "extract-text-webpack-plugin": "^3.0.0",
+    "friendly-errors-webpack-plugin": "^1.6.1",
+    "immutable": "^3.8.2",
+    "jquery": "^3.2.1",
+    "lodash": "^4.17.4",
+    "minimist": "^1.2.0",
+    "mocha": "^3.5.0",
+    "mongodb": "^3.0.2",
+    "mongoose": "^5.0.3",
+    "morgan": "^1.9.0",
+    "node-sass": "^4.5.3",
+    "nodemon": "^1.11.0",
+    "path": "^0.12.7",
+    "popper.js": "^1.12.5",
+    "postcss-loader": "^2.0.6",
+    "postcss-safe-parser": "^3.0.1",
+    "prop-types": "^15.6.0",
+    "react": "^16.2.0",
+    "react-addons-test-utils": "^15.6.2",
+    "react-dom": "^16.2.0",
+    "react-hot-loader": "^3.1.3",
+    "react-router-dom": "^4.2.2",
+    "sass-loader": "^6.0.6",
+    "style-loader": "^0.18.2",
+    "webpack": "^3.10.0",
+    "webpack-dev-server": "^2.11.1",
+    "webpack-hot-middleware": "^2.21.0",
+    "webpack-merge": "^4.1.0",
+    "winston": "^2.3.1",
+    "winston-daily-rotate-file": "^1.7.0"
+  }
+}

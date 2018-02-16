@@ -1,0 +1,13 @@
+$font-family-base: "Roboto", "Helvetica Neue", "Helvetica", Arial, sans-serif;
+
+// Bootstrap is dumb and no one knows how to change a map merge after its already been called.
+// I just took their code and threw it in here and used my variables in primary and secondary...
+$primary: #f00;
+$secondary: #0f0;
+$tertiary: #00f;
+
+$theme-colors: map-merge((
+  primary: $primary,
+  secondary: $secondary,
+  tertiary: $tertiary
+), $theme-colors);

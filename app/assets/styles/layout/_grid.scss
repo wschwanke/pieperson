@@ -1,0 +1,81 @@
+// Grid system
+// Large Screens Sidebar
+$right-columns-lg: 9;
+$left-columns-lg: 2;
+
+//Medium Screens
+$right-columns-md: 8;
+$left-columns-md: 3;
+
+//Small Screens
+$right-columns-sm: 7;
+$left-columns-sm: 4;
+
+//Large Screens Full Width
+$right-columns-fw-lg: 10;
+$bumper-columns-fw-lg: 1;
+
+//Medium Screens Full Width
+$right-columns-fw-md: 10;
+$bumper-columns-fw-md: 1;
+
+//Large Screens Full Width
+$right-columns-fw-sm: 10;
+$bumper-columns-fw-sm: 1;
+
+//Grid with Sidebar
+.right-content {
+  @include make-col-ready();
+  @include media-breakpoint-up(sm) {
+    @include make-col($right-columns-sm);
+  }
+  @include media-breakpoint-up(md) {
+    @include make-col($right-columns-md);
+  }
+  @include media-breakpoint-up(lg) {
+    @include make-col($right-columns-lg);
+  }
+}
+
+.left-content {
+  @include make-col-ready();
+  @include media-breakpoint-up(sm) {
+    @include make-col($left-columns-sm);
+  }
+  @include media-breakpoint-up(md) {
+    @include make-col($left-columns-md);
+  }
+  @include media-breakpoint-up(lg) {
+    @include make-col($left-columns-lg);
+  }
+}
+
+.right-content-fullwidth {
+  @include make-col-ready();
+  @include media-breakpoint-up(sm) {
+    @include make-col($right-columns-fw-sm);
+  }
+  @include media-breakpoint-up(md) {
+    @include make-col($right-columns-fw-md);
+  }
+  @include media-breakpoint-up(lg) {
+    @include make-col($right-columns-fw-lg);
+  }
+}
+
+.bumper {
+  display: none;
+  @include make-col-ready();
+  @include media-breakpoint-up(sm) {
+    @include make-col($bumper-columns-fw-sm);
+    display: block;
+  }
+  @include media-breakpoint-up(md) {
+    @include make-col($bumper-columns-fw-md);
+    display: block;
+  }
+  @include media-breakpoint-up(lg) {
+    @include make-col($bumper-columns-fw-lg);
+    display: block;
+  }
+}
