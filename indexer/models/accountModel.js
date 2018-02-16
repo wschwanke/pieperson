@@ -8,7 +8,7 @@ const accountSchema = new Schema({
     unique: true
   },
   account_last_character: String,
-  account_stash_ids: [Schema.Types.ObjectId],
+  account_item_ids: [Schema.Types.ObjectId],
   updated: {
     type: Date,
     default: Date.now

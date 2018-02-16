@@ -3,13 +3,20 @@ const logger = require('../lib/logger');
 
 // Require Mongoose and pass it the connection information
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/poeindexer');
+mongoose.connect(process.env.MONGODB_URL);
 
 const db = mongoose.connection;
 
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function() {
-  logger.debug('Connected to Database.');
+db.on('error', (err) => {
+  logger.error(`MongoDB Error: ${err}`)
 });
+
+db.once('open', () => {
+  logger.info('Connected to database.');
+});
+
+db.on('close', () => {
+  logger.info('Connection to database closed.');
+})
 
 module.exports = db;

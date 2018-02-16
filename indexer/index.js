@@ -21,10 +21,10 @@ indexer.init = () => {
     })
     .then((response) => {
       let stashes = response.data.stashes;
-      let nextId = response.data.next_change_id;
+      nextId = response.data.next_change_id;
 
       stashParser.parseStashes(stashes);
-      logger.info(`Fetched ${response.data.stashes.length} stash tabs. Next ID is ${nextId}`);
+      logger.info(`Fetched ${stashes.length} stash tabs. Next ID is ${nextId}`);
     })
     .catch((err) => {
       logger.error(err);

@@ -1,4 +1,5 @@
 const logger = require('../lib/logger');
+// Model
 const Item = require('../models/itemModel.js');
 
 const itemController = {};
@@ -7,12 +8,13 @@ const itemController = {};
   exampleController( name String )
 */
 itemController.addItem = (itemObject) => {
-  return Item.findOneAndUpdate(itemObject.id, itemObject, { new: true, upsert: true }).exec()
+  return Item.findOneAndUpdate({ id: itemObject.id }, itemObject, { new: true, upsert: true }).exec()
   .then((item) => {
-    console.log(item);
+    return item;
   })
   .catch((err) => {
-    console
+    logger.error(`itemController.addItem - findOneAndUpdate: ${err}`);
+    return err
   });
 };
 

@@ -1,4 +1,6 @@
 const accountController = require('../../controllers').accountController;
+const itemController = require('../../controllers').itemController;
+const logger = require('../logger');
 
 const stashParser = {};
 
@@ -7,11 +9,14 @@ const stashParser = {};
 */
 stashParser.parseStashes = (stashes) => {
   let publicStashArray = stashParser.findPublicStashes(stashes);
+
+  logger.info(`${publicStashArray.length} public stash tabs out of ${stashes.length}`);
   stashParser.parsePublicStashes(publicStashArray);
 };
 
 stashParser.findPublicStashes = (stashes) => {
   let publicStashes = [];
+
   for (let index = 0; index < stashes.length; index++) {
     if (stashParser.isPublicStashTab(stashes[index])) {
       publicStashes.push(stashes[index]);
@@ -21,16 +26,25 @@ stashParser.findPublicStashes = (stashes) => {
 }
 
 stashParser.parsePublicStashes = (stashes) => {
-  for (let index = 0; index < stashes.length; index++) {
-    accountController.addAccount(stashes[index].accountName, stashes[index].lastCharacterName)
+  for (let accountIndex = 0; accountIndex < stashes.length; accountIndex++) {
+    let accountName = stashes[accountIndex].accountName;
+    let lastCharacterName = stashes[accountIndex].lastCharacterName;
+    let items = stashes[accountIndex].items;
+
+    accountController.addAccount(accountName, lastCharacterName)
     .then((account) => {
-      return stashController.addStash()
-    })
-    .then((stash) => {
-      
+      for (let itemIndex = 0; itemIndex < items.length; itemIndex++) {
+        itemController.addItem(items[itemIndex])
+        .then((item) => {
+          accountController.addItemToAccount(accountName, item._id);
+        })
+        .catch((err) => {
+          logger.error(err);
+        });
+      }
     })
     .catch((err) => {
-
+      logger.error(err);
     });
   }
 };

@@ -3,15 +3,9 @@ const Schema = mongoose.Schema;
 
 const itemSchema = new Schema({
   abyssJewel: Boolean,
-  additionalProperties: [{
-    name: String,
-    values:	[],
-    displayMode: Number,
-    type: Number,
-    progress: Number
-  }],
+  additionalProperties: [Schema.Types.Mixed],
   artFilename: String,
-  category: [String],
+  category: [Schema.Types.Mixed],
   corrupted: Boolean,
   cosmeticMods: [String],
   craftedMods: [String],
@@ -34,38 +28,16 @@ const itemSchema = new Schema({
   lockedToCharacter: Boolean,
   maxStackSize: Number,
   name: String,
-  nextLevelRequirements: [{
-    name: String,
-    values:	[],
-    displayMode: Number,
-    type: Number,
-    progress: Number
-  }],
+  nextLevelRequirements: [Schema.Types.Mixed],
   note:	String,
-  properties: [{
-    name: String,
-    values:	[],
-    displayMode: Number,
-    type: Number,
-    progress: Number
-  }],
+  properties: [Schema.Types.Mixed],
   prophecyDiffText:	String,
   prophecyText: String,
-  requirements: [{
-    name: String,
-    values:	[],
-    displayMode: Number,
-    type: Number,
-    progress: Number
-  }],
+  requirements: [Schema.Types.Mixed],
   secDescrText: String,
   shaper: Boolean,
   socketedItems: [Schema.Types.Mixed],
-  sockets: [{
-    group: Number,
-    attr: Schema.Types.Mixed,
-    sColour: String
-  }],
+  sockets: [Schema.Types.Mixed],
   stackSize: Number,
   support: Boolean,
   talismanTier: Number,
@@ -77,4 +49,4 @@ const itemSchema = new Schema({
   y: Number
 });
 
-module.exports = mongoose.model('Stash', stashSchema);
+module.exports = mongoose.model('Item', itemSchema);

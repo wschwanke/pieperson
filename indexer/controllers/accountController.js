@@ -1,4 +1,5 @@
 const logger = require('../lib/logger');
+// Model
 const Account = require('../models/accountModel.js');
 
 const accountController = {};
@@ -18,23 +19,22 @@ accountController.addAccount = (accountName, lastCharacter) => {
     }
   ).exec()
   .then((account) => {
-    logger.info(`Updated Account: ${account}`);
     return account;
   })
   .catch((err) => {
-    logger.debug(`Account Model - addAccount: ${err}`);
+    logger.error(`accountController.addAccount - findOneAndUpdate: ${err}`);
     return err;
   });
 };
 
-accountController.addStashToAccount = (accountName, stashMongoId) => {
-  return Account.findOneAndUpdate({ accountName }, { $push: { stashes: stashMongoId } }, { new: true, upsert: true }).exec()
-  .then((account) => {
-    console.log(account)
-    return account;
+accountController.addItemToAccount = (accountName, itemMongoId) => {
+  return Account.findOneAndUpdate({ account_name: accountName }, { $push: { account_item_ids: itemMongoId } }, { new: true, upsert: true }).exec()
+  .then((item) => {
+    return item;
   })
   .catch((err) => {
-    logger.error(`Account Model - addStashToAccount: ${err}`);
+    logger.error(`accountController.addItemToAccount - findOneAndUpdate: ${err}`);
+    return err;
   });
 }
 
