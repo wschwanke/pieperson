@@ -1,11 +1,18 @@
+// Setup the ENV variables for local development. Remove this is production.
+const dotenv = require('dotenv').config({ path: 'indexer/env/.env' });
+
+if (dotenv.error) {
+  throw dotenv.error;
+}
+
 const axios = require('axios');
+const db = require('./models');
 const logger = require('./lib/logger');
 const stashParser = require('./lib/stashParser');
-const db = require('./models');
 
-const runIndexer = {}
+const indexer = {}
 
-runIndexer.init = () => {
+indexer.init = () => {
   let nextId = 0;
 
   setInterval(() => {
@@ -25,4 +32,4 @@ runIndexer.init = () => {
   }, 5000);
 };
 
-runIndexer.init();
+indexer.init();
