@@ -1,59 +1,50 @@
-const accountController = require('../../controllers').accountController;
 const itemController = require('../../controllers').itemController;
+const stashController = require('../../controllers').stashController;
 const logger = require('../logger');
+const mongo = require('../database')
 
 const stashParser = {};
 
-/*
-  parseStashes( stashes [Object] )
-*/
-stashParser.parseStashes = (stashes) => {
-  let publicStashArray = stashParser.findPublicStashes(stashes);
+stashParser.parseStashes = (publicStashes) => {
+  return new Promise((resolve, reject) => {
+      // Loop through all stash tabs
+      for (let stashIndex = 0; stashIndex < publicStashes.length; stashIndex++) {
+        let accountName = publicStashes[stashIndex].accountName;
+        let lastCharacterName = publicStashes[stashIndex].lastCharacterName;
+        let stashId = publicStashes[stashIndex].id;
+        let stashName = publicStashes[stashIndex].stash;
+        let stashType = publicStashes[stashIndex].stashType;
+        let isPublic = publicStashes[stashIndex].public;
+        let items = publicStashes[stashIndex].items;
 
-  logger.info(`${publicStashArray.length} public stash tabs out of ${stashes.length}`);
-  stashParser.parsePublicStashes(publicStashArray);
-};
-
-stashParser.findPublicStashes = (stashes) => {
-  let publicStashes = [];
-
-  for (let index = 0; index < stashes.length; index++) {
-    if (stashParser.isPublicStashTab(stashes[index])) {
-      publicStashes.push(stashes[index]);
-    }
-  }
-  return publicStashes;
-}
-
-stashParser.parsePublicStashes = (stashes) => {
-  for (let accountIndex = 0; accountIndex < stashes.length; accountIndex++) {
-    let accountName = stashes[accountIndex].accountName;
-    let lastCharacterName = stashes[accountIndex].lastCharacterName;
-    let items = stashes[accountIndex].items;
-
-    accountController.addAccount(accountName, lastCharacterName)
-    .then((account) => {
-      for (let itemIndex = 0; itemIndex < items.length; itemIndex++) {
-        itemController.addItem(items[itemIndex])
-        .then((item) => {
-          accountController.addItemToAccount(accountName, item._id);
-        })
-        .catch((err) => {
-          logger.error(err);
-        });
+        // Search the database to see if the stashId already exists.
+        stashController.findStash(stashId)
+          .then((stash) => {
+            // If stash === null add the new stash into the db
+            if (stash === null) {
+              return stashController.addStash(accountName, lastCharacterName, stashId, stashName, stashType, isPublic, items)
+                .then((stash) => {
+                  return stash;
+                }, (err) => {
+                  logger.error(`parseStashes - stashController.addStash(): ${err}`);
+                  return err;
+                })
+            }
+            // Update the old stash tab with the new data
+            return stashController.updateStash(accountName, lastCharacterName, stashId, stashName, stashType, isPublic, items)
+              .then((stash) => {
+                  return stash;
+                }, (err) => {
+                  logger.error(`parseStashes - stashController.addStash(): ${err}`);
+                  return err;
+                })
+          }, (err) => {
+            logger.error(`parseStashes - stashController.findStash(): ${err}`);
+            return err;
+          });
       }
-    })
-    .catch((err) => {
-      logger.error(err);
-    });
-  }
-};
-
-stashParser.isPublicStashTab = (stashTab) => {
-  if (!stashTab.public) {
-    return false;
-  }
-  return true;
+    resolve('Stash tabs parsing complete.');
+  });
 };
 
 module.exports = stashParser;
