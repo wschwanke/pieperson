@@ -27,7 +27,7 @@ module.exports = {
       errors: true
     },
     compress: true,
-    public: 'http://localhost:3001',
+    public: 'http://192.168.0.13:3001',
     proxy: {
       '*': 'http://0.0.0.0:3000'
     },
@@ -40,5 +40,5 @@ module.exports = {
       .on('close', code => process.exit(0))
       .on('error', spawnError => console.error(spawnError));
     }
-  },
+  }
 };

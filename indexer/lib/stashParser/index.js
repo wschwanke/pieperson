@@ -28,7 +28,7 @@ stashParser.parseStashes = (publicStashes) => {
                 }, (err) => {
                   logger.error(`parseStashes - stashController.addStash(): ${err}`);
                   return err;
-                })
+                });
             }
             // Update the old stash tab with the new data
             return stashController.updateStash(accountName, lastCharacterName, stashId, stashName, stashType, isPublic, items)
@@ -37,11 +37,11 @@ stashParser.parseStashes = (publicStashes) => {
                 }, (err) => {
                   logger.error(`parseStashes - stashController.addStash(): ${err}`);
                   return err;
-                })
+                });
           }, (err) => {
             logger.error(`parseStashes - stashController.findStash(): ${err}`);
             return err;
-          });
+          })
       }
     resolve('Stash tabs parsing complete.');
   });

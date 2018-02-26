@@ -5,11 +5,11 @@
   "main": "/server/server.js",
   "scripts": {
     "watch": "webpack-dev-server --color --progress -w",
-    "indexer": "nodemon --trace-warnings ./indexer",
+    "indexer": "nodemon ./indexer --trace-warnings --watch ./indexer --ignore ./app --ignore ./server",
     "build": "webpack --color --progress",
     "build:production": "webpack --color --progress -p",
-    "start": "nodemon --trace-warnings ./server/bin/www",
-    "https": "nodemon --trace-warnings --https ./server/bin/www",
+    "start": "nodemon ./server/bin/www --trace-warnings --watch ./server --ignore ./app --ignore ./server",
+    "https": "nodemon ./server/bin/www --trace-warnings --https --watch ./server --ignore ./app --ignore ./server",
     "test": "mocha ./**/*.test.js"
   },
   "repository": {
@@ -22,8 +22,7 @@
   "author": "Will Schwanke",
   "license": "MIT",
   "nodemonConfig": {
-    "verbose": "true",
-    "watch": "server"
+    "verbose": "true"
   },
   "engines": {
     "node": "8.4.0"

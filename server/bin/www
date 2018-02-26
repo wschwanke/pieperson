@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 const cluster = require('cluster');
+const mongo = require('../lib/database');
 
 if (cluster.isMaster) {
   // Count the machine's CPUs
@@ -59,9 +60,12 @@ if (cluster.isMaster) {
     logger.info(`Listening on ${bind}`);
   }
 
-  server.listen(port);
-  server.on('error', onError);
-  server.on('listening', onListening);
+  mongo.connect()
+    .then((client) => {
+      server.listen(port);
+      server.on('error', onError);
+      server.on('listening', onListening);
+    });
 }
 
 // Listen for dying workers

@@ -97,7 +97,7 @@ let webpackConfig = {
     extensions: ['.js', '.jsx'],
   },
 
-  target: 'electron-renderer',
+  target: 'web',
 
   plugins: [
     new CleanWebpackPlugin([config.paths.dist], {

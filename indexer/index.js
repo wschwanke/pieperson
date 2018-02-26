@@ -16,9 +16,12 @@ const indexer = {}
 indexer.nextId = '';
 
 indexer.init = () => {
-  indexer.getPoeNinjaNextChangeId()
+  return indexer.getPoeNinjaNextChangeId()
     .then((poeNinjaResponse) => {
-      indexer.getStashTabsLoop();
+      return indexer.getStashTabsLoop();
+    }, (err) => {
+      logger.error(`POE Ninja API request error: ${err}`);
+      throw err;
     })
 };
 
@@ -30,9 +33,10 @@ indexer.getPoeNinjaNextChangeId = () => {
     .then((poeNinjaResponse) => {
       logger.debug('Received next change ID from POE Ninja.');
       indexer.nextId = poeNinjaResponse.data.next_change_id;
+      return poeNinjaResponse.data.next_change_id;
     })
     .catch((err) => {
-      logger.error(`POE Ninja API request error: ${err}`);
+      throw err;
     });
 }
 
@@ -42,37 +46,45 @@ indexer.getStashTabs = () => {
     headers: { 'Content-Encoding': 'gzip' }
   })
     .then((poeStashTabResponse) => {
-      logger.debug(`Response: ${poeStashTabResponse.status}`);
       logger.debug(`POE Stash Tab Request Successful`);
       return poeStashTabResponse;
-    }).catch((err) => {
-      logger.error(`POE Stash Tab API Error: ${err}`);
-      return err;
+    }, (err) => {
+      throw err;
     });
 }
 
 indexer.getStashTabsLoop = () => {
-  indexer.getStashTabs()
+  return indexer.getStashTabs()
     .then((poeStashTabResponse) => {
       let stashes = poeStashTabResponse.data.stashes;
       indexer.nextId = poeStashTabResponse.data.next_change_id;
 
       logger.info(`Fetched ${stashes.length} stash tabs. Next ID is ${indexer.nextId}`);
       return stashParser.parseStashes(stashes);
+    }, (err) => {
+      if (err.response.status === 429) {
+        let retryTimer = parseInt(err.response.headers['x-rate-limit-ip'].split(':')[2]) * 1000;
+        logger.error(`Being rate limited. Trying again in ${retryTimer}ms.`)
+        setTimeout(indexer.getStashTabsLoop, retryTimer);
+      }
+      throw err;
     })
     .then((parseFinished) => {
       setTimeout(indexer.getStashTabsLoop, 1000);
+    }, (err) => {
+      throw err;
     })
     .catch((err) => {
-      console.log(err)
-      if (err.response.status === 429) {
-        setTimeout(indexer.getStashTabsLoop, 6050);
-      }
-    });
+      logger.error(err);
+      return err;
+    })
 };
 
 // Boot it up
 mongo.connect()
 .then((client) => {
   indexer.init();
+  return;
+}, (err) => {
+  logger.err(`${err}`);
 });

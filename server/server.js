@@ -12,7 +12,6 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const router = require('./router/router.js');
 const morgan = require('morgan');
-const mongoose = require('./models')
 
 // Use express
 const app = express();
