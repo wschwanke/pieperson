@@ -6,7 +6,7 @@ winston.emitErrs = true;
 winston.exitOnError = false;
 
 const logger = new winston.Logger({
-  level: 'silly',
+  level: 'debug',
   transports: [
     new winston.transports.Console({
       prettyPrint: true,

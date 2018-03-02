@@ -18,35 +18,34 @@ indexer.nextId = '';
 indexer.init = () => {
   return indexer.getPoeNinjaNextChangeId()
     .then((poeNinjaResponse) => {
+      logger.verbose('Received next change ID from POE Ninja.');
+      indexer.nextId = poeNinjaResponse.data.next_change_id;
+      logger.info('Starting Indexer.');
+
       return indexer.getStashTabsLoop();
     }, (err) => {
       logger.error(`POE Ninja API request error: ${err}`);
+
       throw err;
     })
 };
 
 indexer.getPoeNinjaNextChangeId = () => {
-  logger.info('Sending request to POE Ninja.');
+  logger.verbose('Sending request to POE Ninja.');
+
   return axios.get(`http://api.poe.ninja/api/Data/GetStats`, {
     headers: { 'Content-Encoding': 'gzip' }
-  })
-    .then((poeNinjaResponse) => {
-      logger.debug('Received next change ID from POE Ninja.');
-      indexer.nextId = poeNinjaResponse.data.next_change_id;
-      return poeNinjaResponse.data.next_change_id;
-    })
-    .catch((err) => {
-      throw err;
-    });
+  });
 }
 
 indexer.getStashTabs = () => {
-  logger.debug('Request sent to Path of Exile API.');
+  logger.verbose('Sending request to Path of Exile API.');
+  
   return axios.get(`http://api.pathofexile.com/public-stash-tabs?id=${indexer.nextId}`, {
     headers: { 'Content-Encoding': 'gzip' }
   })
     .then((poeStashTabResponse) => {
-      logger.debug(`POE Stash Tab Request Successful`);
+      logger.verbose(`POE Stash Tab Request Successful`);
       return poeStashTabResponse;
     }, (err) => {
       throw err;
@@ -55,28 +54,30 @@ indexer.getStashTabs = () => {
 
 indexer.getStashTabsLoop = () => {
   return indexer.getStashTabs()
+    // getStashTabs Success
     .then((poeStashTabResponse) => {
       let stashes = poeStashTabResponse.data.stashes;
       indexer.nextId = poeStashTabResponse.data.next_change_id;
 
-      logger.info(`Fetched ${stashes.length} stash tabs. Next ID is ${indexer.nextId}`);
+      logger.verbose(`Fetched ${stashes.length} stash tabs. Next ID is ${indexer.nextId}`);
       return stashParser.parseStashes(stashes);
     }, (err) => {
+      // getStashTabs Error
       if (err.response.status === 429) {
         let retryTimer = parseInt(err.response.headers['x-rate-limit-ip'].split(':')[2]) * 1000;
         logger.error(`Being rate limited. Trying again in ${retryTimer}ms.`)
         setTimeout(indexer.getStashTabsLoop, retryTimer);
       }
+      logger.error(`getStashTabsLoop - getStashTabs: ${err.response.status}`);
+      logger.debug(`getStashTabsLoop - getStashTabs: ${err.response}`);
       throw err;
     })
     .then((parseFinished) => {
-      setTimeout(indexer.getStashTabsLoop, 1000);
+      setTimeout(indexer.getStashTabsLoop, 750);
+      logger.silly('Set timeout on getStashTabsLoop()');
+      return parseFinished;
     }, (err) => {
       throw err;
-    })
-    .catch((err) => {
-      logger.error(err);
-      return err;
     })
 };
 
@@ -86,5 +87,5 @@ mongo.connect()
   indexer.init();
   return;
 }, (err) => {
-  logger.err(`${err}`);
+  logger.error(`${err}`);
 });

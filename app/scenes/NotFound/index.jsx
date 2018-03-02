@@ -1,19 +1,15 @@
 import React from 'react';
 
 // Import layouts
-import Header from '../../components/Header';
-import Body from '../../components/Body';
-import Footer from '../../components/Footer';
+import Content from '../../components/Content';
+import DockMenu from '../../components/DockMenu';
 
 const NotFound = () => (
-  <div className="scene-wrap">
-    <Header />
-    <Body sidebar={false} title="404: Not Found">
-      <div className="row">
-        Test
-      </div>
-    </Body>
-    <Footer />
+  <div>
+    <DockMenu />
+    <Content>
+      404: Not Found
+    </Content>
   </div>
 );
 

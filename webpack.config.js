@@ -83,7 +83,7 @@ let webpackConfig = {
                 sourceMap: config.enabled.sourceMaps,
               },
             },
-            { loader: 'sass-loader', options: { sourceMap: config.enabled.sourceMaps } },
+            { loader: 'sass-loader', options: { includePaths: [__dirname + '/node_modules'], sourceMap: config.enabled.sourceMaps } },
           ],
         }),
       },

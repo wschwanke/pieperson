@@ -30,15 +30,16 @@ module.exports = {
     public: 'http://192.168.0.13:3001',
     proxy: {
       '*': 'http://0.0.0.0:3000'
-    },
-    setup() {
-      spawn(
-        'electron',
-        ['electron.js'],
-        { shell: true, env: process.env, stdio: 'inherit' }
-      )
-      .on('close', code => process.exit(0))
-      .on('error', spawnError => console.error(spawnError));
     }
+    // ,
+    // setup() {
+    //   spawn(
+    //     'electron',
+    //     ['electron.js'],
+    //     { shell: true, env: process.env, stdio: 'inherit' }
+    //   )
+    //   .on('close', code => process.exit(0))
+    //   .on('error', spawnError => console.error(spawnError));
+    // }
   }
 };
