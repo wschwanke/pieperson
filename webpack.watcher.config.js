@@ -26,8 +26,12 @@ module.exports = {
       warnings: false,
       errors: true
     },
+    watchOptions: {
+      aggregateTimeout: 300,
+      poll: 1000,
+    },
     compress: true,
-    public: 'http://192.168.0.13:3001',
+    public: 'http://0.0.0.0:3001',
     proxy: {
       '*': 'http://0.0.0.0:3000'
     }

@@ -1,15 +1,14 @@
 {
-  "name": "Pie Person",
+  "name": "pie-person",
   "version": "1.0.0",
   "description": "",
   "main": "/server/server.js",
   "scripts": {
     "watch": "webpack-dev-server --color --progress -w",
-    "indexer": "nodemon ./indexer --trace-warnings --watch ./indexer --ignore ./app --ignore ./server",
+    "indexer": "yarn install && nodemon ./indexer --trace-warnings --watch ./indexer --legacy-watch",
     "build": "webpack --color --progress",
     "build:production": "webpack --color --progress -p",
     "start": "nodemon ./server/bin/www --trace-warnings --watch ./server --ignore ./app --ignore ./server",
-    "https": "nodemon ./server/bin/www --trace-warnings --https --watch ./server --ignore ./app --ignore ./server",
     "test": "mocha ./**/*.test.js"
   },
   "repository": {
@@ -23,9 +22,6 @@
   "license": "MIT",
   "nodemonConfig": {
     "verbose": "true"
-  },
-  "engines": {
-    "node": "8.4.0"
   },
   "dependencies": {
     "autoprefixer": "^7.1.4",

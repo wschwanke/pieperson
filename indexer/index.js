@@ -33,7 +33,7 @@ indexer.init = () => {
 indexer.getPoeNinjaNextChangeId = () => {
   logger.verbose('Sending request to POE Ninja.');
 
-  return axios.get(`http://api.poe.ninja/api/Data/GetStats`, {
+  return axios.get(`https://poe.ninja/api/data/getstats`, {
     headers: { 'Content-Encoding': 'gzip' }
   });
 }
@@ -47,7 +47,8 @@ indexer.getStashTabs = () => {
     .then((poeStashTabResponse) => {
       logger.verbose(`POE Stash Tab Request Successful`);
       return poeStashTabResponse;
-    }, (err) => {
+    })
+    .catch((err) => {
       throw err;
     });
 }
@@ -63,6 +64,7 @@ indexer.getStashTabsLoop = () => {
       return stashParser.parseStashes(stashes);
     }, (err) => {
       // getStashTabs Error
+      console.log(err)
       if (err.response.status === 429) {
         let retryTimer = parseInt(err.response.headers['x-rate-limit-ip'].split(':')[2]) * 1000;
         logger.error(`Being rate limited. Trying again in ${retryTimer}ms.`)
