@@ -9,7 +9,7 @@ mongo.connect = () => {
   return mongodb.connect(process.env.MONGODB_URI)
   .then((client) => {
     logger.info('Connected to MongoDB successfully.')
-    _db = client.db('poeindexer');
+    _db = client.db('pieperson');
     return client;
   })
   .catch((err) => {
