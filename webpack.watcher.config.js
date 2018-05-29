@@ -1,5 +1,4 @@
 const webpack = require('webpack');
-const { spawn } = require('child_process');
 
 module.exports = {
   output: {
@@ -33,17 +32,7 @@ module.exports = {
     compress: true,
     public: 'http://0.0.0.0:3001',
     proxy: {
-      '*': 'http://0.0.0.0:3000'
+      '*': 'http://proxy:3000'
     }
-    // ,
-    // setup() {
-    //   spawn(
-    //     'electron',
-    //     ['electron.js'],
-    //     { shell: true, env: process.env, stdio: 'inherit' }
-    //   )
-    //   .on('close', code => process.exit(0))
-    //   .on('error', spawnError => console.error(spawnError));
-    // }
   }
 };

@@ -1,20 +1,21 @@
 import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-// import PrivateRoute from './components/PrivateRoute';
+// import { Provider } from 'react-redux';
+import { hot } from 'react-hot-loader';
 
 // Import the route components
-import Homepage from './scenes/Homepage';
-import NotFound from './scenes/NotFound';
+import Homepage from 'scenes/Homepage';
 
-function Router() {
+function Router({ store }) {
   return (
-    <BrowserRouter>
-      <Switch>
-        <Route exact path="/" component={Homepage} />
-        <Route component={NotFound} />
-      </Switch>
-    </BrowserRouter>
+    // <Provider store={store}>
+      <BrowserRouter>
+        <Switch>
+          <Route exact path="/" component={Homepage} />
+        </Switch>
+      </BrowserRouter>
+    // </Provider>
   );
 }
 
-export default Router;
+export default hot(module)(Router);

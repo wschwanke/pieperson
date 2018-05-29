@@ -7,6 +7,7 @@ const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 
 const config = require('./config');
 
@@ -14,48 +15,43 @@ const config = require('./config');
 let webpackConfig = {
   context: config.paths.root,
 
-  devtool: (config.enabled.sourceMaps ? '#source-map' : undefined),
+  devtool: (config.enabled.sourceMaps ? 'cheap-module-source-map' : undefined),
 
   entry: {
-    main: config.entry.main,
+    main: [
+      join(config.paths.root, 'app/index.jsx'),
+      join(config.paths.root, 'app/assets/styles/main.scss'),
+    ],
+  },
+
+  stats: 'verbose',
+
+  mode: config.env.production ? 'production' : 'development',
+
+  performance: {
+    hints: false,
   },
 
   output: {
     path: config.paths.dist,
     publicPath: config.paths.public,
     filename: 'scripts/[name].js',
-  },
-
-  stats: {
-    hash: false,
-    version: false,
-    timings: false,
-    children: false,
-    errors: false,
-    errorDetails: false,
-    warnings: false,
-    chunks: false,
-    modules: false,
-    reasons: false,
-    source: false,
-    publicPath: false,
+    chunkFilename: 'scripts/[name].js',
   },
 
   module: {
     rules: [
       {
-        test: /\.jsx?$/,
+        test: /\.(js|jsx)$/,
         exclude: [/bower_components/, /node_modules/],
-        loader: ['cache-loader', 'babel-loader'],
+        loader: ['babel-loader'],
       },
       {
         test: /\.css?$/,
         exclude: /node_modules/,
-        // include: config.paths.assets,
         use: ExtractTextPlugin.extract({
           fallback: 'style-loader',
           use: [
-            { loader: 'cache-loader' },
             { loader: 'css-loader', options: { sourceMap: config.enabled.sourceMaps } },
             {
               loader: 'postcss-loader',
@@ -70,11 +66,9 @@ let webpackConfig = {
       {
         test: /\.scss?$/,
         exclude: /node_modules/,
-        // include: config.paths.assets,
         use: ExtractTextPlugin.extract({
           fallback: 'style-loader',
           use: [
-            { loader: 'cache-loader' },
             { loader: 'css-loader', options: { sourceMap: config.enabled.sourceMaps } },
             {
               loader: 'postcss-loader',
@@ -83,7 +77,16 @@ let webpackConfig = {
                 sourceMap: config.enabled.sourceMaps,
               },
             },
-            { loader: 'sass-loader', options: { includePaths: [__dirname + '/node_modules'], sourceMap: config.enabled.sourceMaps } },
+            // { loader: 'resolve-url-loader', options: { sourceMap: config.enabled.sourceMaps } },
+            {
+              loader: 'sass-loader',
+              options: {
+                includePaths: [
+                  join(__dirname, '/node_modules'),
+                ],
+                sourceMap: config.enabled.sourceMaps,
+              },
+            },
           ],
         }),
       },
@@ -92,29 +95,59 @@ let webpackConfig = {
 
   resolve: {
     alias: {
-      Services: join(config.paths.root, 'app/services'),
+      // blocks: join(config.paths.root, 'app/blocks'),
+      components: join(config.paths.root, 'app/components'),
+      services: join(config.paths.root, 'app/services'),
+      scenes: join(config.paths.root, 'app/scenes'),
+      // router: join(config.paths.root, 'app/router'),
     },
     extensions: ['.js', '.jsx'],
+  },
+
+  optimization: {
+    splitChunks: {
+      chunks: 'all',
+      minSize: 30000,
+      minChunks: 1,
+      maxAsyncRequests: 5,
+      maxInitialRequests: 3,
+      automaticNameDelimiter: '-',
+      name: true,
+      cacheGroups: {
+        vendor: {
+          test: /[\\/]node_modules[\\/]/,
+          priority: -10,
+        },
+        default: {
+          minChunks: 2,
+          priority: -20,
+          reuseExistingChunk: true,
+        },
+      },
+    },
   },
 
   target: 'web',
 
   plugins: [
+    new HardSourceWebpackPlugin(),
     new CleanWebpackPlugin([config.paths.dist], {
       root: config.paths.root,
       verbose: false,
     }),
-    new CopyWebpackPlugin([
+    new CopyWebpackPlugin(
+      [
+        {
+          context: join(config.paths.assets, 'images'),
+          from: '**/*',
+          to: join(config.paths.root, 'server/public/dist/images'),
+          flatten: true,
+        },
+      ],
       {
-        context: join(config.paths.assets, 'images'),
-        from: '**/*',
-        to: join(config.paths.root, 'server/public/dist/images'),
-        flatten: true,
+        copyUnmodified: true,
       },
-    ],
-    {
-      copyUnmodified: true,
-    }),
+    ),
     new ExtractTextPlugin({
       filename: 'styles/main.css',
       allChunks: true,
@@ -132,7 +165,6 @@ if (config.env.production) {
 }
 
 if (config.enabled.watcher) {
-  webpackConfig.entry = config.entry.hotReload;
   webpackConfig = merge(webpackConfig, require('./webpack.watcher.config.js'));
 }
 

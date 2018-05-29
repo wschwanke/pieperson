@@ -1,5 +1,5 @@
 const winston = require('winston');
-require('winston-daily-rotate-file');
+const moment = require('moment');
 const { join } = require('path');
 
 winston.emitErrs = true;
@@ -14,16 +14,14 @@ const logger = new winston.Logger({
       json: false,
       colorize: true
     }),
-    new winston.transports.DailyRotateFile({
+    new winston.transports.File({
       level: 'info',
-      name: 'log-file',
-      filename: join(process.cwd(), 'logs/.log'),
-      datePattern: 'yyyy-MM-dd',
-      prepend: true,
+      filename: join(process.cwd(), `logs/${moment().format('YYYY-MM-DD')}.log`),
       prettyPrint: true,
       maxsize: 5242880,
       maxFiles: 5,
-      colorize: false
+      colorize: false,
+      zippedArchive: true
     })
   ]
 });

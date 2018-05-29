@@ -19,17 +19,6 @@ const config = {
     optimize: isProduction,
     sourceMaps: !isProduction
   },
-  entry: {
-    hotReload: [
-      'react-hot-loader/patch',
-      path.join(rootPath, 'app/hotReload.js'),
-      path.join(rootPath, 'app/assets/styles/main.scss')
-    ],
-    main: [
-      path.join(rootPath, 'app'),
-      path.join(rootPath, 'app/assets/styles/main.scss')
-    ]
-  }
 };
 
 module.exports = merge(config, {
@@ -37,7 +26,7 @@ module.exports = merge(config, {
     production: isProduction,
     development: !isProduction
   },
-  argv.env)
+    argv.env)
 });
 
 

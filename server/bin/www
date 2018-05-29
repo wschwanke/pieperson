@@ -1,79 +1,83 @@
 #!/usr/bin/env node
 
+// Setup the ENV variables for local development. Remove this is production.
+const dotenv = require('dotenv').config({ path: 'server/env/.env' });
+
+if (dotenv.error) {
+  throw dotenv.error;
+}
+
+const fs = require('fs');
 const cluster = require('cluster');
-const mongo = require('../lib/database');
+const logger = require('../lib/logger/index.js');
+const http = require('http');
+const app = require('../server.js');
+// Count the machine's CPUs
+const cpuCount = require('os').cpus().length;
+
+let server;
+
+logger.info('Checking for /logs folder...');
+if (!fs.existsSync('./logs')) {
+  logger.info('Logs folder not found. Create logs folder in root directory.');
+  fs.mkdirSync('./logs');
+}
+
+/**
+ * On Error event listener for the server.
+ * @param error - The error that is passed into the event.
+ */
+const onError = (error) => {
+  if (error.syscall !== 'listen') {
+    throw error;
+  }
+
+  const bind = typeof port === 'string' ? `Pipe: ${port}` : `Port: ${port}`;
+
+  // handle specific listen errors with friendly messages
+  switch (error.code) {
+    case 'EACCES':
+      logger.error(`${bind} requires elevated privileges.`);
+      process.exit(1);
+      break;
+    case 'EADDRINUSE':
+      logger.error(`${bind} is already in use.`);
+      process.exit(1);
+      break;
+    default:
+      throw error;
+  }
+};
+
+/**
+ * On Listen even listener. Tells the server what to do once it has been initialized.
+ */
+const onListening = () => {
+  const addr = server.address();
+  const bind = typeof addr === 'string' ? `pipe: ${addr}` : `port: ${addr.port}`;
+  logger.info(`Listening on ${bind}`);
+};
 
 if (cluster.isMaster) {
-  // Count the machine's CPUs
-  let cpuCount = require('os').cpus().length;
-
   // Create a worker for each CPU
   for (let i = 0; i < cpuCount; i += 1) {
-      cluster.fork();
+    cluster.fork();
   }
 } else {
-  // Sets up the required variables to run the server with its config
-  const app = require('../server.js');
-  const http = require('http');
-  // Require the logger
-  const logger = require('../lib/logger/index.js');
-
-  // Set the port to the ENV variable or use 4040 as default
-  const port = process.env.PORT;
+  // Set the port to the ENV variable or use 3000 as default
+  const port = process.env.PORT || 3000;
   app.set('port', port);
 
   // create the actual server using our app
-  const server = http.createServer(app);
-
-
-  /*
-    Event listener for handling errors with the HTTP Server.
-  */
-  function onError(error) {
-    if (error.syscall !== 'listen') {
-      throw error;
-    }
-
-    const bind = typeof port === 'string' ? `Pipe: ${port}` : `Port: ${port}`;
-
-    // handle specific listen errors with friendly messages
-    switch (error.code) {
-      case 'EACCES':
-        logger.error(`${bind} requires elevated privileges.`);
-        process.exit(1);
-        break;
-      case 'EADDRINUSE':
-        logger.error(`${bind} is already in use.`);
-        process.exit(1);
-        break;
-      default:
-        throw error;
-    }
-  }
-
-  /*
-    Event listener for HTTP server "listening" event.
-  */
-  function onListening() {
-    const addr = server.address();
-    const bind = typeof addr === 'string' ? `pipe: ${addr}` : `port: ${addr.port}`;
-    logger.info(`Listening on ${bind}`);
-  }
-
-  mongo.connect()
-    .then((client) => {
-      server.listen(port);
-      server.on('error', onError);
-      server.on('listening', onListening);
-    });
+  server = http.createServer(app);
+  server.listen(port);
+  server.on('error', onError);
+  server.on('listening', onListening);
 }
 
 // Listen for dying workers
-cluster.on('exit', function (worker) {
-
-    // Replace the dead worker,
-    // we're not sentimental
-    console.log('Worker %d died :(', worker.id);
-    cluster.fork();
-
+cluster.on('exit', (worker) => {
+  // Replace the dead worker
+  logger.info('Worker %d has died.', worker.id);
+  cluster.fork();
 });
