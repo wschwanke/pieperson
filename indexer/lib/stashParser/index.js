@@ -6,7 +6,8 @@ const mongo = require('../database')
 const stashParser = {};
 
 stashParser.parseStashes = (publicStashes) => {
-  let ignoreLeagues = ['Standard', 'Beastiary', 'Hardcore']
+  // const ignoreLeagues = ['Standard', 'Hardcore'];
+  const ignoreLeagues = ['Hardcore']
 
   // Loop through all stash tabs
   for (let stashIndex = 0; stashIndex < publicStashes.length; stashIndex++) {
