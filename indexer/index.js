@@ -31,7 +31,7 @@ indexer.init = () => {
 };
 
 indexer.getPoeNinjaNextChangeId = () => {
-  logger.verbose('Sending request to POE Ninja.');
+  logger.silly('Sending request to POE Ninja.');
 
   return axios.get(`https://poe.ninja/api/data/getstats`, {
     headers: { 'Content-Encoding': 'gzip' }
@@ -39,13 +39,13 @@ indexer.getPoeNinjaNextChangeId = () => {
 }
 
 indexer.getStashTabs = () => {
-  logger.verbose('Sending request to Path of Exile API.');
+  logger.silly('Sending request to Path of Exile API.');
   
   return axios.get(`http://api.pathofexile.com/public-stash-tabs?id=${indexer.nextId}`, {
     headers: { 'Content-Encoding': 'gzip' }
   })
     .then((poeStashTabResponse) => {
-      logger.verbose(`POE Stash Tab Request Successful`);
+      logger.silly(`POE Stash Tab Request Successful`);
       return poeStashTabResponse;
     })
     .catch((err) => {
@@ -60,7 +60,7 @@ indexer.getStashTabsLoop = () => {
       let stashes = poeStashTabResponse.data.stashes;
       indexer.nextId = poeStashTabResponse.data.next_change_id;
 
-      logger.verbose(`Fetched ${stashes.length} stash tabs. Next ID is ${indexer.nextId}`);
+      logger.silly(`Fetched ${stashes.length} stash tabs. Next ID is ${indexer.nextId}`);
       return stashParser.parseStashes(stashes);
     }, (err) => {
       // getStashTabs Error
