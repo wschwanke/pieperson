@@ -6,7 +6,7 @@ services:
     restart: always
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: ganuroth12
+      MONGO_INITDB_ROOT_PASSWORD: password12
     volumes:
       - mongodata:/data/db
   indexer:
@@ -33,7 +33,7 @@ services:
     environment:
       ME_CONFIG_MONGODB_SERVER: database
       ME_CONFIG_MONGODB_ADMINUSERNAME: root
-      ME_CONFIG_MONGODB_ADMINPASSWORD: ganuroth12
+      ME_CONFIG_MONGODB_ADMINPASSWORD: password12
   web:
     image: "node:carbon"
     user: "node"
