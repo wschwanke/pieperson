@@ -2,10 +2,9 @@ const webpack = require('webpack');
 
 module.exports = {
   output: {
-    pathinfo: true
+    pathinfo: true,
   },
-  devtool: '#cheap-module-eval-source-map',
-  stats: false,
+  devtool: '#cheap-module-source-map',
   plugins: [
     new webpack.optimize.OccurrenceOrderPlugin(),
     new webpack.HotModuleReplacementPlugin(),
@@ -14,6 +13,16 @@ module.exports = {
   ],
   devServer: {
     // https: true,
+    stats: {
+      all: false,
+      colors: true,
+      timings: true,
+      env: true,
+      version: true,
+    },
+    headers: {
+      'access-control-allow-origin': '*',
+    },
     open: false,
     host: '0.0.0.0',
     port: 3001,
@@ -23,16 +32,17 @@ module.exports = {
     hotOnly: true,
     overlay: {
       warnings: false,
-      errors: true
+      errors: true,
     },
+    publicPath: '/dist/',
+    // Enabled this for Docker on Windows so hotload works.
     watchOptions: {
-      aggregateTimeout: 300,
-      poll: 1000,
+      poll: false,
     },
     compress: true,
     public: 'http://0.0.0.0:3001',
     proxy: {
-      '*': 'http://proxy:3000'
-    }
-  }
+      '*': 'http://0.0.0.0:3000',
+    },
+  },
 };

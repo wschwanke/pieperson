@@ -1,0 +1,24 @@
+{
+  "extends": [
+    "tslint:latest"
+  ],
+  "rules": {
+    "quotemark": [
+      true,
+      "single",
+      "jsx-double"
+    ],
+    "no-submodule-imports": false,
+    "no-implicit-dependencies": false,
+    "member-access": false,
+    "semicolon": [
+      true,
+      "always"
+    ],
+    "max-line-length": [
+      true,
+      150
+    ],
+    "no-namespace": false
+  }
+}
