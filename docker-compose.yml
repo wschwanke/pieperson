@@ -9,20 +9,20 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: password12
     volumes:
       - mongodata:/data/db
-  indexer:
-    image: "node:carbon"
-    user: "node"
-    depends_on:
-      - db
-    working_dir: /home/pieperson
-    restart: always
-    environment:
-      - NODE_ENV=development
-    volumes:
-      - .:/home/pieperson
-    links:
-      - "db:database"
-    command: "yarn indexer"
+  # indexer:
+  #   image: "node:carbon"
+  #   user: "node"
+  #   depends_on:
+  #     - db
+  #   working_dir: /home/pieperson
+  #   restart: always
+  #   environment:
+  #     - NODE_ENV=development
+  #   volumes:
+  #     - .:/home/pieperson
+  #   links:
+  #     - "db:database"
+  #   command: "yarn indexer"
   mongo-express:
     image: mongo-express
     restart: always
@@ -34,37 +34,37 @@ services:
       ME_CONFIG_MONGODB_SERVER: database
       ME_CONFIG_MONGODB_ADMINUSERNAME: root
       ME_CONFIG_MONGODB_ADMINPASSWORD: password12
-  web:
-    image: "node:carbon"
-    user: "node"
-    depends_on:
-      - db
-    working_dir: /home/pieperson
-    restart: always
-    ports:
-      - "3000:3000"
-    environment:
-      - NODE_ENV=development
-    volumes:
-      - .:/home/pieperson
-    links:
-      - "db:database"
-    command: "yarn start"
-  watch:
-    image: "node:carbon"
-    user: "node"
-    depends_on:
-      - web
-    working_dir: /home/pieperson
-    restart: always
-    environment:
-      - NODE_ENV=development
-    volumes:
-      - .:/home/pieperson
-    ports:
-      - "3001:3001"
-    links: 
-      - "web:proxy"
-    command: "yarn watch"
+  # web:
+  #   image: "node:carbon"
+  #   user: "node"
+  #   depends_on:
+  #     - db
+  #   working_dir: /home/pieperson
+  #   restart: always
+  #   ports:
+  #     - "3000:3000"
+  #   environment:
+  #     - NODE_ENV=development
+  #   volumes:
+  #     - .:/home/pieperson
+  #   links:
+  #     - "db:database"
+  #   command: "yarn start"
+  # watch:
+  #   image: "node:carbon"
+  #   user: "node"
+  #   depends_on:
+  #     - web
+  #   working_dir: /home/pieperson
+  #   restart: always
+  #   environment:
+  #     - NODE_ENV=development
+  #   volumes:
+  #     - .:/home/pieperson
+  #   ports:
+  #     - "3001:3001"
+  #   links: 
+  #     - "web:proxy"
+  #   command: "yarn watch"
 volumes:
   mongodata:
