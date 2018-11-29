@@ -1,29 +1,36 @@
-const mongodb = require('mongodb').MongoClient;
-const logger = require('../logger');
 
-let mongo = {};
-let _db;
+import { MongoClient, Db } from 'mongodb';
+import { logger } from '../logger';
 
-// Use connect method to connect to the server
-mongo.connect = () => {
-  return mongodb.connect(process.env.MONGODB_URI)
-  .then((client) => {
-    logger.info('Connected to MongoDB successfully.')
-    _db = client.db('pieperson');
-    return client;
-  })
-  .catch((err) => {
-    logger.error(`Error connecting to MongoDB: ${err}`);
-    return err;
-  });
-};
+class MongoDB {
+  db: Db;
 
-mongo.getDB = () => {
-  return _db;
+  async connect() {
+    try {
+      const client = await MongoClient.connect(<string>process.env.MONGODB_URI);
+      logger.info('Connected to MongoDB successfully.')
+      this.db = client.db('pieperson');
+      return client;
+    } catch(err) {
+      logger.error(`Error connecting to MongoDB: ${err}`);
+      return err;
+    }
+  }
+
+  getDb() {
+    return this.db;
+  }
+
+  async disconnect(client: MongoClient) {
+    try {
+      await client.close();
+      logger.info('Disconnected from database.')
+    } catch (err) {
+      logger.error(`Error connecting to MongoDB: ${err}`);
+    }
+  }
 }
 
-mongo.disconnect = (client) => {
-  client.close();
-};
+const mongo = new MongoDB();
 
-module.exports = mongo;
+export default mongo;

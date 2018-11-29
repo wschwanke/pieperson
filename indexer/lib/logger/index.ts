@@ -1,29 +1,14 @@
-const winston = require('winston');
-const moment = require('moment');
-const { join } = require('path');
+import * as winston from 'winston';
 
-winston.emitErrs = true;
-winston.exitOnError = false;
-
-const logger = new winston.Logger({
-  level: 'debug',
+const logger = winston.createLogger({
+  format: winston.format.combine(
+    winston.format.prettyPrint(),
+    winston.format.colorize(),
+  ),
+  level: 'silly',
   transports: [
-    new winston.transports.Console({
-      prettyPrint: true,
-      handleExceptions: true,
-      json: false,
-      colorize: true
-    }),
-    new winston.transports.File({
-      level: 'info',
-      filename: join(process.cwd(), `logs/${moment().format('YYYY-MM-DD')}.log`),
-      prettyPrint: true,
-      maxsize: 5242880,
-      maxFiles: 5,
-      colorize: false,
-      zippedArchive: true
-    })
-  ]
+    new winston.transports.Console(),
+  ],
 });
 
-module.exports = logger;
+export { logger };

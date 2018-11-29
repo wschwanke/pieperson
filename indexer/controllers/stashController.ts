@@ -1,45 +1,43 @@
-const logger = require('../lib/logger');
-const mongo = require('../lib/database');
-
-const stashController = {};
+import { logger } from '../lib/logger';
+import mongo from '../lib/database';
 
 /*
   addStash( stash Object )
 */
-stashController.addStash = (accountName, lastCharacterName, stashId, stashName, stashType, isPublic, items) => {
-  let Stash = mongo.getDB().collection('stashes');
+const addStash = (accountName: string, lastCharacterName: string, stashId: number, stashName: string, stashType: string, isPublic: boolean, items: any[]) => {
+  let Stash = mongo.getDb().collection('stashes');
 
   return Stash.insertOne({ accountName, lastCharacterName, stashId, stashName, stashType, isPublic, items })
-  .then((stash) => {
+  .then((stash: any) => {
     return stash;
-  }, (err) => {
+  }, (err: Error) => {
     throw err;
   });
 };
 
-stashController.updateStash = (accountName, lastCharacterName, stashId, stashName, stashType, isPublic, items) => {
-  let Stash = mongo.getDB().collection('stashes');
+const updateStash = (accountName: string, lastCharacterName: string, stashId: number, stashName: string, stashType: string, isPublic: boolean, items: any[]) => {
+  let Stash = mongo.getDb().collection('stashes');
 
   return Stash.updateOne({ stashId }, { $set: { accountName, lastCharacterName, stashName, stashType, isPublic, items } })
-  .then((stash) => {
+  .then((stash: any) => {
     return stash;
-  }, (err) => {
+  }, (err: Error) => {
     throw err;
   })
 };
 
-stashController.findStash = (stashId) => {
-  let Stash = mongo.getDB().collection('stashes');
+const findStash = (stashId: number) => {
+  let Stash = mongo.getDb().collection('stashes');
 
   return Stash.find({stashId}, { limit: 1 }).toArray()
-  .then((stash) => {
+  .then((stash: any) => {
     if (stash.length > 0) {
       return stash[0]
     }
     return null;
-  }, (err) => {
+  }, (err: Error) => {
     throw err;
   });
 };
 
-module.exports = stashController;
+export { addStash, updateStash, findStash };

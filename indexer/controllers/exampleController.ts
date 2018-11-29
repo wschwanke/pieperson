@@ -1,10 +1,10 @@
-const exampleController = {};
+// const exampleController = {};
 
-/*
-  exampleController( name String )
-*/
-exampleController.insertAction = (name) => {
+// /*
+//   exampleController( name String )
+// */
+// exampleController.insertAction = (name) => {
   
-};
+// };
 
-module.exports = exampleController;
+// module.exports = exampleController;

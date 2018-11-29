@@ -4,7 +4,7 @@
   "description": "",
   "main": "/server/server.js",
   "scripts": {
-    "indexer": "nodemon --exec ts-node ./indexer --trace-warnings --watch ./indexer --legacy-watch",
+    "indexer": "nodemon --exec \"ts-node --project ./indexer/tsconfig.json ./indexer\" --trace-warnings --watch ./indexer --legacy-watch",
     "watch": "webpack-dev-server --color --progress -w --config ./webpack/webpack.config.js",
     "build": "webpack --color --progress --config ./webpack/webpack.config.js",
     "build:production": "webpack --color --progress -p --config ./webpack/webpack.config.js",
@@ -25,6 +25,9 @@
     "verbose": "true"
   },
   "dependencies": {
+    "@types/axios": "^0.14.0",
+    "@types/dotenv": "^6.1.0",
+    "@types/mongodb": "^3.1.15",
     "axios": "^0.17.1",
     "body-parser": "^1.17.2",
     "classnames": "^2.2.6",
@@ -48,8 +51,9 @@
     "redux": "^4.0.1",
     "redux-thunk": "^2.3.0",
     "simplebar": "^3.1.0-beta.5",
+    "tslint": "^5.11.0",
     "whatwg-fetch": "^3.0.0",
-    "winston": "^2.3.1"
+    "winston": "^3.1.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.1.2",

@@ -1,25 +1,24 @@
 {
-  "extends": ["tslint:latest"],
+  "extends": [
+    "tslint:latest"
+  ],
   "rules": {
-    "jsx-no-lambda": false,
-    "jsx-no-multiline-js": false,
-    "quotemark": [true, "single", "jsx-double"],
-    "no-submodule-imports": [
+    "quotemark": [
       true,
-      "blocks",
-      "components",
-      "layout",
-      "lib",
-      "scenes",
-      "router",
-      "state",
-      "models",
-      "test"
+      "single",
+      "jsx-double"
     ],
+    "no-submodule-imports": false,
     "no-implicit-dependencies": false,
     "member-access": false,
-    "semicolon": [true, "always"],
-    "max-line-length": [true, 150],
-    "no-unused-variable": true
+    "semicolon": [
+      true,
+      "always"
+    ],
+    "max-line-length": [
+      true,
+      150
+    ],
+    "no-namespace": false
   }
 }
