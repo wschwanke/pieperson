@@ -7,9 +7,9 @@ const parseStashes = (publicStashes: any[]) => {
   const ignoreLeagues = ['Hardcore'];
 
   // Loop through all stash tabs
-  for (let stashIndex = 0; stashIndex < publicStashes.length; stashIndex++) {
-    let { accountName, lastCharacterName, id, stash, stashType, items } = publicStashes[stashIndex];
-    let isPublic = publicStashes[stashIndex].public;
+  for (const publicStash of publicStashes) {
+    const { accountName, lastCharacterName, id, stash, stashType, items } = publicStash;
+    const isPublic = publicStash.public;
 
     // Each item holds the value of what league it is in rather than the stash tab for quick reference.
     // Check to see if the stash has items in it and if it does check to make sure that the league setting on the first item
@@ -21,8 +21,8 @@ const parseStashes = (publicStashes: any[]) => {
           // If stash === null add the new stash into the db
           if (playerStash === null) {
             return stashController.addStash(accountName, lastCharacterName, id, stash, stashType, isPublic, items)
-              .then((playerStash: any) => {
-                return playerStash;
+              .then((addedStash: any) => {
+                return addedStash;
               }, (err: Error) => {
                 logger.error(`parseStashes - stashController.addStash(): ${err}`);
                 return err;
@@ -30,8 +30,8 @@ const parseStashes = (publicStashes: any[]) => {
           }
           // Update the old stash tab with the new data
           return stashController.updateStash(accountName, lastCharacterName, id, stash, stashType, isPublic, items)
-            .then((playerStash: any) => {
-                return playerStash;
+            .then((updatedStash: any) => {
+                return updatedStash;
               }, (err: Error) => {
                 logger.error(`parseStashes - stashController.addStash(): ${err}`);
                 return err;
@@ -39,7 +39,7 @@ const parseStashes = (publicStashes: any[]) => {
         }, (err: Error) => {
           logger.error(`parseStashes - stashController.findStash(): ${err}`);
           return err;
-        })
+        });
     } else {
       logger.silly(`Dropped stash tab because of league filter.`);
     }

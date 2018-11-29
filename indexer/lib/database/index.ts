@@ -1,5 +1,7 @@
-
-import { MongoClient, Db } from 'mongodb';
+/**
+ * External dependencies
+ */
+import { Db, MongoClient } from 'mongodb';
 import { logger } from '../logger';
 
 class MongoDB {
@@ -7,11 +9,11 @@ class MongoDB {
 
   async connect() {
     try {
-      const client = await MongoClient.connect(<string>process.env.MONGODB_URI);
-      logger.info('Connected to MongoDB successfully.')
+      const client = await MongoClient.connect(process.env.MONGODB_URI as string);
+      logger.info('Connected to MongoDB successfully.');
       this.db = client.db('pieperson');
       return client;
-    } catch(err) {
+    } catch (err) {
       logger.error(`Error connecting to MongoDB: ${err}`);
       return err;
     }
@@ -24,7 +26,7 @@ class MongoDB {
   async disconnect(client: MongoClient) {
     try {
       await client.close();
-      logger.info('Disconnected from database.')
+      logger.info('Disconnected from database.');
     } catch (err) {
       logger.error(`Error connecting to MongoDB: ${err}`);
     }

@@ -1,11 +1,19 @@
-import { logger } from '../lib/logger';
+// import { logger } from '../lib/logger';
 import mongo from '../lib/database';
 
 /*
   addStash( stash Object )
 */
-const addStash = (accountName: string, lastCharacterName: string, stashId: number, stashName: string, stashType: string, isPublic: boolean, items: any[]) => {
-  let Stash = mongo.getDb().collection('stashes');
+const addStash = (
+  accountName: string,
+  lastCharacterName: string,
+  stashId: number,
+  stashName: string,
+  stashType: string,
+  isPublic: boolean,
+  items: any[],
+) => {
+  const Stash = mongo.getDb().collection('stashes');
 
   return Stash.insertOne({ accountName, lastCharacterName, stashId, stashName, stashType, isPublic, items })
   .then((stash: any) => {
@@ -15,24 +23,32 @@ const addStash = (accountName: string, lastCharacterName: string, stashId: numbe
   });
 };
 
-const updateStash = (accountName: string, lastCharacterName: string, stashId: number, stashName: string, stashType: string, isPublic: boolean, items: any[]) => {
-  let Stash = mongo.getDb().collection('stashes');
+const updateStash = (
+  accountName: string,
+  lastCharacterName: string,
+  stashId: number,
+  stashName: string,
+  stashType: string,
+  isPublic: boolean,
+  items: any[],
+) => {
+  const Stash = mongo.getDb().collection('stashes');
 
   return Stash.updateOne({ stashId }, { $set: { accountName, lastCharacterName, stashName, stashType, isPublic, items } })
   .then((stash: any) => {
     return stash;
   }, (err: Error) => {
     throw err;
-  })
+  });
 };
 
 const findStash = (stashId: number) => {
-  let Stash = mongo.getDb().collection('stashes');
+  const Stash = mongo.getDb().collection('stashes');
 
   return Stash.find({stashId}, { limit: 1 }).toArray()
   .then((stash: any) => {
     if (stash.length > 0) {
-      return stash[0]
+      return stash[0];
     }
     return null;
   }, (err: Error) => {

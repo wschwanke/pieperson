@@ -1,13 +1,13 @@
 {
   "compilerOptions": {
     "allowUnreachableCode": true,
-    "allowSyntheticDefaultImports": true,
+    "allowSyntheticDefaultImports": false,
     "esModuleInterop": false,
     "target": "esnext",
     "downlevelIteration": true,
     "importHelpers": true,
     "sourceMap": true,
-    "module": "esnext",
+    "module": "commonjs",
     "moduleResolution": "node",
     "allowJs": false,
     "checkJs": false,

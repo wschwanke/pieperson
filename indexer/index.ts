@@ -1,16 +1,16 @@
 /**
  * External dependencies
  */
+import * as dotenv from 'dotenv';
+import 'isomorphic-fetch';
 import { MongoClient } from 'mongodb';
-import axios from 'axios';
-import dotenv from 'dotenv';
 
 /**
  * Internal dependencies
  */
+import mongo from './lib/database';
 import { logger } from './lib/logger';
 import parseStashes from './lib/stashParser';
-import mongo from './lib/database';
 
 dotenv.config({ path: 'indexer/env/.env' });
 
@@ -35,7 +35,7 @@ class StashIndexer implements IIndexer {
       this.nextId = poeNinjaResponse.data.next_change_id;
       logger.info('Starting Indexer.');
       this.getStashTabsLoop();
-    } catch(err) {
+    } catch (err) {
       logger.error(`POE Ninja API request error: ${err}`);
     }
   }
@@ -43,18 +43,18 @@ class StashIndexer implements IIndexer {
   async getPoeNinjaNextChangeId() {
     logger.silly('Sending request to POE Ninja.');
 
-    return axios.get(`https://poe.ninja/api/data/getstats`, {
-      headers: { 'Content-Encoding': 'gzip' }
+    return fetch(`https://poe.ninja/api/data/getstats`, {
+      headers: { 'Content-Encoding': 'gzip' },
     });
   }
 
   async getStashTabs() {
     logger.silly('Sending request to Path of Exile API.');
 
-    return axios.get(`http://api.pathofexile.com/public-stash-tabs?id=${this.nextId}`, {
-      headers: { 'Content-Encoding': 'gzip' }
+    return fetch(`http://api.pathofexile.com/public-stash-tabs?id=${this.nextId}`, {
+      headers: { 'Content-Encoding': 'gzip' },
     })
-      .then((poeStashTabResponse) => {
+      .then((poeStashTabResponse: any) => {
         logger.silly(`POE Stash Tab Request Successful`);
         return poeStashTabResponse;
       })
@@ -66,18 +66,18 @@ class StashIndexer implements IIndexer {
   async getStashTabsLoop() {
     return this.getStashTabs()
       // getStashTabs Success
-      .then((poeStashTabResponse) => {
-        let stashes = poeStashTabResponse.data.stashes;
+      .then((poeStashTabResponse: any) => {
+        const stashes = poeStashTabResponse.data.stashes;
         this.nextId = poeStashTabResponse.data.next_change_id;
 
         logger.silly(`Fetched ${stashes.length} stash tabs. Next ID is ${this.nextId}`);
         return parseStashes(stashes);
       }, (err) => {
         // getStashTabs Error
-        console.log(err)
+        logger.error(err);
         if (err.response.status === 429) {
-          let retryTimer = parseInt(err.response.headers['x-rate-limit-ip'].split(':')[2]) * 1000;
-          logger.error(`Being rate limited. Trying again in ${retryTimer}ms.`)
+          const retryTimer = parseInt(err.response.headers['x-rate-limit-ip'].split(':')[2], 10) * 1000;
+          logger.error(`Being rate limited. Trying again in ${retryTimer}ms.`);
           setTimeout(this.getStashTabsLoop, retryTimer);
         }
         logger.error(`getStashTabsLoop - getStashTabs: ${err.response.status}`);
