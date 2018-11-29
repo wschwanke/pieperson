@@ -7,9 +7,9 @@ const parseStashes = (publicStashes: any[]) => {
   const ignoreLeagues = ['Hardcore'];
 
   // Loop through all stash tabs
-  for (const publicStash of publicStashes) {
-    const { accountName, lastCharacterName, id, stash, stashType, items } = publicStash;
-    const isPublic = publicStash.public;
+  for (let publicStash of publicStashes) {
+    let { accountName, lastCharacterName, id, stash, stashType, items } = publicStash;
+    let isPublic = publicStash.public;
 
     // Each item holds the value of what league it is in rather than the stash tab for quick reference.
     // Check to see if the stash has items in it and if it does check to make sure that the league setting on the first item
