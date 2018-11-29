@@ -1,0 +1,25 @@
+{
+  "extends": ["tslint:latest", "tslint-react"],
+  "rules": {
+    "jsx-no-lambda": false,
+    "jsx-no-multiline-js": false,
+    "quotemark": [true, "single", "jsx-double"],
+    "no-submodule-imports": [
+      true,
+      "blocks",
+      "components",
+      "layout",
+      "lib",
+      "scenes",
+      "router",
+      "state",
+      "models",
+      "test"
+    ],
+    "no-implicit-dependencies": false,
+    "member-access": false,
+    "semicolon": [true, "always"],
+    "max-line-length": [true, 150],
+    "no-unused-variable": true
+  }
+}
