@@ -20,8 +20,4 @@ module.exports = {
       tsConfigFile: 'tsconfig.jest.json',
     },
   },
-  // We aren't using this yet, but its ready to use when we need it.
-  // snapshotSerializers: [
-  //   'enzyme-to-json/serializer'
-  // ]
 };

@@ -1,34 +1,71 @@
-// Setup the ENV variables for local development. Remove this is production.
-const dotenv = require('dotenv').config({ path: 'server/env/.env' });
+/**
+ * External depdencies
+ */
+import * as dotenv from 'dotenv';
+import { createReadStream } from 'fs';
+import 'isomorphic-fetch';
+import * as Koa from 'koa';
+import * as koaBodyParser from 'koa-bodyparser';
+import * as helmet from 'koa-helmet';
+import * as koaLogger from 'koa-logger';
+import * as mount from 'koa-mount';
+import * as serveStatic from 'koa-static';
+import { join } from 'path';
 
-if (dotenv.error) {
-  throw dotenv.error;
-}
+// Setup the ENV variables for local development. This MUST be called before any internal dependencies
+dotenv.config({ path: 'webserver/env/.env' });
 
-const path = require('path');
-const express = require('express');
-const cookieParser = require('cookie-parser');
-const bodyParser = require('body-parser');
-const router = require('./router/router.js');
-const morgan = require('morgan');
+/**
+ * Internal depdencies
+ */
+import { logger } from './lib/logger';
 
-// Use express
-const app = express();
+const {
+  SECRET_KEY_SALT,
+  PORT,
+} = process.env;
 
-app.disable('x-powered-by');
+// Use Koa
+const server: Koa = new Koa();
 
-app.use(morgan('tiny'));
+// Error handling
+server.use(async (ctx, next) => {
+  try {
+    await next();
+  } catch (err) {
+    ctx.status = err.status || 500;
+    ctx.body = err.message;
+    // @ts-ignore
+    ctx.app.emit('error', err, ctx);
+  }
+});
 
-// Use body-parser for parsing JSON and URLencoded body data
-app.use(bodyParser.json());
-app.use(bodyParser.text());
-app.use(bodyParser.urlencoded({ extended: true }));
+server.use(helmet());
 
-app.use(cookieParser());
+// Body parser
+server.use(koaBodyParser());
 
-// Serve the static client React files
-app.use('/dist', express.static(path.join(__dirname, '/public/dist'), { fallthrough: false }));
+// Server salt
+server.keys = [SECRET_KEY_SALT];
 
-app.use('/', router);
+// Koa Logger
+server.use(koaLogger());
 
-module.exports = app;
+server.use(mount('/assets', serveStatic(join(process.cwd(), '.build/client/assets/'))));
+
+// Return the body
+server.use(async (ctx) => {
+  ctx.type = 'html';
+  ctx.body = createReadStream(join(process.cwd(), '.build/client/index.html'));
+  return;
+});
+
+// Set the port to the ENV variable or use 3000 as default
+const port = PORT || 3000;
+
+// create the actual server using our app
+server.listen(port, () => {
+  logger.info(`Web Server:`);
+  logger.info(`Listening on port ${port}`);
+  logger.info(`Serving static files from ${join(process.cwd(), '.build/client')}`);
+});

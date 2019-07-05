@@ -1,35 +1,3 @@
 {
-  "compilerOptions": {
-    "allowUnreachableCode": true,
-    "allowSyntheticDefaultImports": false,
-    "esModuleInterop": false,
-    "target": "esnext",
-    "downlevelIteration": true,
-    "importHelpers": true,
-    "sourceMap": true,
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "allowJs": false,
-    "checkJs": false,
-    "forceConsistentCasingInFileNames": true,
-    "experimentalDecorators": true,
-    "noImplicitAny": true,
-    "noUnusedParameters": true,
-    "noImplicitReturns": true,
-    "noImplicitThis": true,
-    "noUnusedLocals": true,
-    "skipLibCheck": true,
-    "strictNullChecks": true,
-    "suppressImplicitAnyIndexErrors": false,
-    "outDir": "../.compiled/indexer",
-    "baseUrl": ".",
-  },
-  "include": [
-    "./**/*.ts",
-    "./**/*.tsx",
-    "./**/*.types.ts"
-  ],
-  "exclude": [
-    "node_modules",
-  ]
+  "extends": "../tsconfig.indexer.json"
 }

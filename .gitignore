@@ -38,3 +38,5 @@ yarn.lock
 
 # hidden files
 .DS_Store
+
+.code-workspace

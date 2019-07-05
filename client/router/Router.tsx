@@ -1,21 +1,24 @@
+/**
+ * External dependencies
+ */
 import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-// import { Provider } from 'react-redux';
-import { hot } from 'react-hot-loader';
 
-// Import the route components
-import Homepage from 'scenes/Homepage';
+/**
+ * Internal dependencies
+ */
+import { SceneHomepage } from '@Scenes/Homepage';
+import { SceneNotFound } from '@Scenes/NotFound';
 
-function Router({ store }) {
+const Router: React.FunctionComponent = () => {
   return (
-    // <Provider store={store}>
-      <BrowserRouter>
-        <Switch>
-          <Route exact path="/" component={Homepage} />
-        </Switch>
-      </BrowserRouter>
-    // </Provider>
+    <BrowserRouter>
+      <Switch>
+        <Route exact path="/" component={SceneHomepage} />
+        <Route component={SceneNotFound} />
+      </Switch>
+    </BrowserRouter>
   );
-}
+};
 
-export default hot(module)(Router);
+export { Router };

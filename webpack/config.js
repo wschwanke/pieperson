@@ -12,8 +12,9 @@ const config = {
   paths: {
     root: rootPath,
     assets: path.join(rootPath, 'client/assets'),
-    public: '/dist/',
-    dist: path.join(rootPath, 'public/dist'),
+    public: '/assets/',
+    compiled: path.join(rootPath, '.build/client/assets'),
+    clean: path.join(rootPath, '.build/client')
   },
   enabled: {
     linting: isLinting,

@@ -1,4 +1,11 @@
 const webpack = require('webpack');
+const fs = require('fs');
+const path = require('path');
+const os = require('os');
+const { spawnSync } = require('child_process');
+
+const mkcertCA = spawnSync('mkcert', ['-CAROOT']);
+const mkcertCADir = mkcertCA.stdout.toString().replace('\n', '');
 
 module.exports = {
   output: {
@@ -30,17 +37,22 @@ module.exports = {
     historyApiFallback: true,
     hot: true,
     hotOnly: true,
+    https: {
+      key: fs.readFileSync(path.resolve(os.homedir(), '.localhost_ssl/server.key')),
+      cert: fs.readFileSync(path.resolve(os.homedir(), '.localhost_ssl/server.crt')),
+      ca: fs.readFileSync(path.resolve(mkcertCADir, 'rootCA.pem')),
+    },
     overlay: {
       warnings: false,
       errors: true,
     },
-    publicPath: '/dist/',
+    publicPath: '/assets/',
     // Enabled this for Docker on Windows so hotload works.
     watchOptions: {
       poll: false,
     },
     compress: true,
-    public: 'http://0.0.0.0:3001',
+    public: 'http://0.0.0.0',
     proxy: {
       '*': 'http://0.0.0.0:3000',
     },

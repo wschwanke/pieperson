@@ -1,0 +1,31 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": false,
+    "target": "es5",
+    "lib": ["es6", "dom"],
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "jsx": "react",
+    "baseUrl": "./",
+    "typeRoots": [
+      "./node_modules/@types",
+      "./client/types.ts"
+    ],
+    "outDir": ".build/client",
+    "paths": {
+      "@Assets/*": ["client/assets/*"],
+      "@Blocks/*": ["client/blocks/*"],
+      "@Components/*": ["client/components/*"],
+      "@Layout/*": ["client/layout/*"],
+      "@Lib/*": ["client/lib/*"],
+      "@Scenes/*": ["client/scenes/*"],
+      "@Test/*": ["client/test/*"]
+    },
+    "plugins": [
+      { "name": "typescript-tslint-plugin" }
+    ]
+  },
+  "exclude": ["webserver", "api"]
+}

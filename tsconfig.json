@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "allowUnreachableCode": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": false,
+    "downlevelIteration": true,
+    "importHelpers": true,
+    "sourceMap": true,
+    "jsx": "preserve",
+    "checkJs": false,
+    "forceConsistentCasingInFileNames": true,
+    "experimentalDecorators": true,
+    "noErrorTruncation": true,
+    "strict": true,
+    "skipLibCheck": true,
+  },
+}
