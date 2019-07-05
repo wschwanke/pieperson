@@ -29,7 +29,5 @@
     ],
     "outDir": ".build/webserver",
   },
-  "include": [
-    "./**/*.ts",
-  ],
+  "exclude": ["client", "indexer"]
 }

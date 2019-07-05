@@ -22,14 +22,12 @@
     "skipLibCheck": true,
     "strictNullChecks": false,
     "suppressImplicitAnyIndexErrors": false,
-    "baseUrl": "./api",
+    "baseUrl": ".",
     "typeRoots": [
       "../node_modules/@types",
-      "./types.ts"
+      "./indexer/types.ts"
     ],
-    "outDir": ".build/api",
+    "outDir": ".build/indexer",
   },
-  "include": [
-    "./api/**/*.ts",
-  ],
+  "exclude": ["client", "webserver"]
 }
