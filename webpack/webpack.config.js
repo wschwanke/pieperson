@@ -178,7 +178,7 @@ let webpackConfig = {
     new HardSourceWebpackPlugin(),
     new webpack.ProgressPlugin(),
     new ForkTsCheckerPlugin({
-      tsconfig: join(config.paths.root, 'tsconfig.client.json'),
+      tsconfig: join(config.paths.root, 'client', 'tsconfig.json'),
       memoryLimit: memoryLimit,
       checkSyntacticErrors: true,
       async: false,

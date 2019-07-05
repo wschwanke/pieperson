@@ -4,10 +4,10 @@ const path = require('path');
 const os = require('os');
 const { spawnSync } = require('child_process');
 
-const mkcertCA = spawnSync('mkcert', ['-CAROOT']);
-const mkcertCADir = mkcertCA.stdout.toString().replace('\n', '');
+// Get the current operating system.
+const operatingSystem = os.platform();
 
-module.exports = {
+let watcherConfig = {
   output: {
     pathinfo: true,
   },
@@ -37,11 +37,6 @@ module.exports = {
     historyApiFallback: true,
     hot: true,
     hotOnly: true,
-    https: {
-      key: fs.readFileSync(path.resolve(os.homedir(), '.localhost_ssl/server.key')),
-      cert: fs.readFileSync(path.resolve(os.homedir(), '.localhost_ssl/server.crt')),
-      ca: fs.readFileSync(path.resolve(mkcertCADir, 'rootCA.pem')),
-    },
     overlay: {
       warnings: false,
       errors: true,
@@ -58,3 +53,22 @@ module.exports = {
     },
   },
 };
+
+
+// Checks to see if the operating system is set to anything but Windows
+// then looks for the SSL certificate to apply HTTPS in local dev.
+if (operatingSystem !== 'win32') {
+  const mkcertCA = spawnSync('mkcert', ['-CAROOT']);
+  const mkcertCADir = mkcertCA.stdout.toString().replace('\n', '');
+
+  watcherConfig = Object.assign(watcherConfig, {
+    https: {
+      key: fs.readFileSync(path.resolve(os.homedir(), '.localhost_ssl/server.key')),
+      cert: fs.readFileSync(path.resolve(os.homedir(), '.localhost_ssl/server.crt')),
+      ca: fs.readFileSync(path.resolve(mkcertCADir, 'rootCA.pem')),
+    }
+  });
+}
+
+
+module.exports = watcherConfig;
