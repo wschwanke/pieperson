@@ -20,7 +20,6 @@ let webpackConfig = {
 
   entry: {
     bundle: [
-      '@babel/polyfill',
       join(config.paths.root, 'client/entry.tsx'),
       join(config.paths.root, 'client/assets/font-awesome/fontawesome.scss'),
       join(config.paths.root, 'client/assets/font-awesome/regular.scss'),
