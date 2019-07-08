@@ -1,0 +1,33 @@
+{
+  "compilerOptions": {
+    "allowUnreachableCode": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": false,
+    "target": "esnext",
+    "downlevelIteration": true,
+    "importHelpers": true,
+    "sourceMap": true,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "allowJs": false,
+    "jsx": "preserve",
+    "checkJs": false,
+    "forceConsistentCasingInFileNames": true,
+    "experimentalDecorators": true,
+    "noImplicitAny": true,
+    "noUnusedParameters": false,
+    "noImplicitReturns": false,
+    "noImplicitThis": false,
+    "noUnusedLocals": false,
+    "skipLibCheck": true,
+    "strictNullChecks": false,
+    "suppressImplicitAnyIndexErrors": false,
+    "baseUrl": "./webserver",
+    "typeRoots": [
+      "../node_modules/@types",
+      "./types.ts"
+    ],
+    "outDir": ".build/webserver",
+  },
+  "exclude": ["client", "indexer"]
+}

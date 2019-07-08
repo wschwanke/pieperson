@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
     "allowUnreachableCode": true,
-    "allowSyntheticDefaultImports": false,
-    "esModuleInterop": false,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
     "target": "esnext",
     "downlevelIteration": true,
     "importHelpers": true,
