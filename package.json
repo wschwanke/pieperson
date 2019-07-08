@@ -1,13 +1,13 @@
 {
   "name": "pieperson",
-  "description": "Ketosis tracker app.",
+  "description": "Path of Exile trade API enhancer.",
   "version": "0.0.1",
   "private": true,
   "license": "MIT",
   "author": "Will Schwanke",
   "repository": {
     "type": "git",
-    "url": "https://bitbucket.org/wschwanke/pieperson.git"
+    "url": "https://github.com/wschwanke/pieperson.git"
   },
   "engines": {
     "node": "10.x"
