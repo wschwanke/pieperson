@@ -1,11 +1,12 @@
-// Import the actual bootstrap SCSS from the node_modules folder
-// @import '~bootstrap/scss/bootstrap';
-
-// Import the variables that we want to overwrite in bootstrap and include our own custom ones
+// Internal variables
 @import 'common/variables';
 
-// Import everything else
-@import 'components/all';
+// Import bootstrap
+// @import 'tabler/tabler';
+
+// Internal dependencies
+@import 'common/global';
+@import 'components';
+
+// Layout styles
 @import 'layout/all';
-@import 'scenes/all';
-@import 'themes/all';
