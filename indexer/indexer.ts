@@ -3,30 +3,26 @@
  */
 import { config } from 'dotenv';
 import 'isomorphic-fetch';
-import { MongoClient } from 'mongodb';
 
 /**
  * Internal dependencies
  */
-import mongo from './lib/database';
+import { mongo } from './lib/database';
 import { logger } from './lib/logger';
-import parseStashes from './lib/stashParser';
+import { parseStashes } from './lib/stash-parser';
 
 // Initialize our environment variables with dotenv
 config({ path: 'indexer/env/.env' });
 
 interface IIndexer {
   nextId: string;
-  mongoClient: MongoClient;
 }
 
 class StashIndexer implements IIndexer {
   nextId = '';
-  mongoClient: MongoClient;
 
-  constructor(mongoClient: MongoClient) {
+  constructor() {
     this.nextId = '';
-    this.mongoClient = mongoClient;
   }
 
   /**
@@ -94,7 +90,7 @@ class StashIndexer implements IIndexer {
       this.nextId = poeStashTabResponseJSON.next_change_id;
       logger.silly(`Fetched ${stashes.length} stash tabs. Next ID is ${this.nextId}`);
       await parseStashes(stashes);
-      setTimeout(this.getStashTabsLoop, 750);
+      setTimeout(this.getStashTabsLoop, 2000);
     } catch (err) {
       // getStashTabs Error
       logger.error(err);
@@ -114,8 +110,8 @@ class StashIndexer implements IIndexer {
  */
 async function init() {
   try {
-    const mongoClient: MongoClient = await mongo.connect();
-    const Indexer = new StashIndexer(mongoClient);
+    await mongo.connect();
+    const Indexer = new StashIndexer();
     Indexer.init();
   } catch (err) {
     logger.error(`${err}`);

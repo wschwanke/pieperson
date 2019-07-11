@@ -21,6 +21,9 @@
     "api:start": "ts-node --typeCheck --project ./tsconfig.api.json ./api/api.ts",
     "api:build": "tsc --build ./tsconfig.api.json ./api/api.ts",
     "api:dev": "ts-node-dev -r tsconfig-paths/register --respawn --project ./tsconfig.api.json ./api/api.ts --watch ./api --typeCheck",
+    "indexer:start": "ts-node --typeCheck --project ./tsconfig.indexer.json ./indexer/indexer.ts",
+    "indexer:build": "tsc --build ./tsconfig.indexer.json ./indexer/indexer.ts",
+    "indexer:dev": "ts-node-dev -r tsconfig-paths/register --respawn --project ./tsconfig.indexer.json ./indexer/indexer.ts --watch ./indexer --typeCheck",
     "build": "yarn run webserver:build && yarn run client:build",
     "start": "node ./.build/webserver/server.js"
   },
@@ -91,6 +94,7 @@
     "@types/koa-session": "^5.7.4",
     "@types/koa-static": "^4.0.0",
     "@types/lodash": "^4.14.116",
+    "@types/mongodb": "^3.1.28",
     "@types/node": "^10.12.9",
     "@types/node-fetch": "^2.3.3",
     "@types/react": "^16.4.11",

@@ -1,5 +1,5 @@
 // import { logger } from '../lib/logger';
-import mongo from '../lib/database';
+import { mongo } from '../lib/database';
 
 /*
   addStash( stash Object )

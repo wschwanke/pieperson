@@ -1,10 +1,10 @@
 // import itemController from '../../controllers';
-import * as stashController from '../../controllers/stashController';
+import * as stashController from '../../controllers/stash-controller';
 import { logger } from '../logger';
 
 const parseStashes = (publicStashes: any[]) => {
   // const ignoreLeagues = ['Standard', 'Hardcore'];
-  const ignoreLeagues = ['Hardcore'];
+  const ignoreLeagues = ['Hardcore', 'Standard', 'Legion Hardcore'];
 
   // Loop through all stash tabs
   for (let publicStash of publicStashes) {
@@ -48,4 +48,4 @@ const parseStashes = (publicStashes: any[]) => {
   return publicStashes;
 };
 
-export default parseStashes;
+export { parseStashes };

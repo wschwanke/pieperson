@@ -24,12 +24,5 @@
     "outDir": "../.compiled/indexer",
     "baseUrl": ".",
   },
-  "include": [
-    "./**/*.ts",
-    "./**/*.tsx",
-    "./**/*.types.ts"
-  ],
-  "exclude": [
-    "node_modules",
-  ]
+  "exclude": ["node_modules"]
 }
