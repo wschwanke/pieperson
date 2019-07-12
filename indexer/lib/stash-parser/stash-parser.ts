@@ -6,7 +6,7 @@ import { forEach } from 'lodash';
 /**
  * Internal dependencies
  */
-import { stashController } from '@Controllers/stash-controller';
+import { stashController } from '@Controllers/stash';
 import { logger } from '@Lib/logger';
 
 const parseStashes = (publicStashes: PublicStash[]) => {

@@ -29,7 +29,6 @@ class Database {
   getDb() {
     return this.db;
   }
-
 }
 
 const database = new Database();
