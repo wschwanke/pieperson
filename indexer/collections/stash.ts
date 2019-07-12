@@ -1,14 +1,25 @@
 /**
+ * External dependencies
+ */
+import { Db } from 'mongodb';
+
+/**
  * Internal dependencies
  */
-import { database } from '@Lib/database';
+import { logger } from '@Lib/logger';
 
-const stash = database.createCollection('stash', {
-  validator: {
-    $jsonSchema: {
-      bsonType: 'object',
-    },
-  },
-});
+const createStashCollection = async (mongo: Db) => {
+  try {
+    mongo.createCollection('stash', {
+      validator: {
+        $jsonSchema: {
+          bsonType: 'object',
+        },
+      },
+    });
+  } catch (error) {
+    logger.error(error);
+  }
+};
 
-export { stash };
+export { createStashCollection };

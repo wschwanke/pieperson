@@ -8,8 +8,9 @@ import { forEach } from 'lodash';
  */
 import { stashController } from '@Controllers/stash';
 import { logger } from '@Lib/logger';
+import { PathOfExile } from '@Types';
 
-const parseStashes = (publicStashes: PublicStash[]) => {
+const parseStashes = (publicStashes: PathOfExile.PublicStash[]) => {
   const currentLeague = 'Legion';
 
   // Loop through all stash tabs

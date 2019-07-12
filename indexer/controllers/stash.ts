@@ -1,5 +1,6 @@
 // import { logger } from '../lib/logger';
 import { database } from '@Lib/database';
+import { PathOfExile } from '@Types';
 
 const Stash = database.getDb().collection('stashes');
 
