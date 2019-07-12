@@ -20,6 +20,7 @@
       150
     ],
     "no-namespace": false,
-    "interface-name": false
+    "interface-name": false,
+    "object-literal-sort-keys": [true, "match-declaration-order-only"]
   }
 }

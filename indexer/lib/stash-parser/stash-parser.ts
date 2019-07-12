@@ -14,7 +14,7 @@ const parseStashes = (publicStashes: PublicStash[]) => {
 
   // Loop through all stash tabs
   forEach(publicStashes, (stash) => {
-    console.log(stash);
+    // we do nothing for now
   });
 
   return publicStashes;
