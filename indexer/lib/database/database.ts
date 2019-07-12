@@ -7,7 +7,7 @@ import { logger } from '../logger';
 const { MONGODB_URI } = process.env;
 
 class Database {
-  db: Db;
+  db!: Db;
 
   async connect(): Promise<MongoClient | any> {
     logger.info('Connecting to the database.');

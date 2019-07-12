@@ -19,6 +19,7 @@
       true,
       150
     ],
-    "no-namespace": false
+    "no-namespace": false,
+    "interface-name": false
   }
 }

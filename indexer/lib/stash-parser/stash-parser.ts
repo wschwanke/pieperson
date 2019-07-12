@@ -1,15 +1,21 @@
-// import itemController from '../../controllers';
-import * as stashController from '../../controllers/stash-controller';
-import { logger } from '../logger';
+/**
+ * External dependencies
+ */
+import { forEach } from 'lodash';
 
-const parseStashes = (publicStashes: any[]) => {
-  // const ignoreLeagues = ['Standard', 'Hardcore'];
+/**
+ * Internal dependencies
+ */
+import { stashController } from '@Controllers/stash-controller';
+import { logger } from '@Lib/logger';
+
+const parseStashes = (publicStashes: PublicStash[]) => {
   const currentLeague = 'Legion';
 
   // Loop through all stash tabs
-  for (let publicStash of publicStashes) {
-
-  }
+  forEach(publicStashes, (stash) => {
+    console.log(stash);
+  });
 
   return publicStashes;
 };

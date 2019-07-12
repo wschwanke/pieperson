@@ -1,3 +1,19 @@
 {
-  "extends": "../tsconfig.indexer.json"
+  "extends": "../tsconfig.indexer.json",
+  "compilerOptions": {
+    "outDir": "../.build/indexer",                        /* Redirect output structure to the directory. */
+    "rootDir": ".",                       /* Specify the root directory of input files. Use to control the output directory structure with --outDir. */
+    /* Module Resolution Options */
+    "moduleResolution": "node",            /* Specify module resolution strategy: 'node' (Node.js) or 'classic' (TypeScript pre-1.6). */
+    "baseUrl": "./",                       /* Base directory to resolve non-absolute module names. */
+    "paths": {
+      "@Lib/*": ["./lib/*"],
+      "@Controllers/*": ["./controllers/*"],
+      "@Collections/*": ["./collections/*"]
+    },                           /* A series of entries which re-map imports to lookup locations relative to the 'baseUrl'. */
+    "rootDirs": [],                        /* List of root folders whose combined content represents the structure of the project at runtime. */
+    "typeRoots": [
+      "./node_modules/@types"
+    ],                       /* List of folders to include type definitions from. */
+  }
 }

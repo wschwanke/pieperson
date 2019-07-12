@@ -23,7 +23,7 @@
     "api:dev": "ts-node-dev -r tsconfig-paths/register --respawn --project ./tsconfig.api.json ./api/api.ts --watch ./api --typeCheck",
     "indexer:start": "ts-node --typeCheck --project ./tsconfig.indexer.json ./indexer/indexer.ts",
     "indexer:build": "tsc --build ./tsconfig.indexer.json ./indexer/indexer.ts",
-    "indexer:dev": "ts-node-dev -r tsconfig-paths/register --respawn --project ./tsconfig.indexer.json ./indexer/indexer.ts --watch ./indexer --typeCheck",
+    "indexer:dev": "TS_NODE_PROJECT=indexer/tsconfig.json ts-node-dev -P indexer/tsconfig.json -r tsconfig-paths/register --respawn ./indexer/indexer.ts",
     "build": "yarn run webserver:build && yarn run client:build",
     "start": "node ./.build/webserver/server.js"
   },
@@ -42,7 +42,7 @@
     "classnames": "^2.2.5",
     "copy-webpack-plugin": "^5.0.3",
     "core-js": "^3.1.4",
-    "dotenv": "^6.2.0",
+    "dotenv": "^8.0.0",
     "graphql": "^14.3.0",
     "ioredis": "^4.10.0",
     "isomorphic-fetch": "^2.2.1",
@@ -75,7 +75,7 @@
   "devDependencies": {
     "@hot-loader/react-dom": "^16.8.6",
     "@types/classnames": "^2.2.6",
-    "@types/dotenv": "^6.1.0",
+    "@types/dotenv": "^6.1.1",
     "@types/enzyme": "^3.1.13",
     "@types/enzyme-adapter-react-16": "^1.0.3",
     "@types/fetch-mock": "^6.0.3",
