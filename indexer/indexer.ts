@@ -4,15 +4,15 @@
 import { config } from 'dotenv';
 import 'isomorphic-fetch';
 
+// Initialize our environment variables with dotenv
+config({ path: 'indexer/env/.env' });
+
 /**
  * Internal dependencies
  */
-import { mongo } from './lib/database';
-import { logger } from './lib/logger';
-import { parseStashes } from './lib/stash-parser';
-
-// Initialize our environment variables with dotenv
-config({ path: 'indexer/env/.env' });
+import { database } from '@Lib/database';
+import { logger } from '@Lib/logger';
+import { parseStashes } from '@Lib/stash-parser';
 
 interface IIndexer {
   nextId: string;
@@ -108,9 +108,9 @@ class StashIndexer implements IIndexer {
 /**
  * Waits to connect to the mongo database and then passes the mongo client into our indexer
  */
-async function init() {
+async function main() {
   try {
-    await mongo.connect();
+    await database.connect();
     const Indexer = new StashIndexer();
     Indexer.init();
   } catch (err) {
@@ -119,4 +119,4 @@ async function init() {
 }
 
 // Start the indexer
-init();
+main();

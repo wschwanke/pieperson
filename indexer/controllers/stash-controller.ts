@@ -1,10 +1,7 @@
 // import { logger } from '../lib/logger';
-import { mongo } from '../lib/database';
+import { database } from '@Lib/database';
 
-/*
-  addStash( stash Object )
-*/
-const addStash = (
+const upsert = (
   accountName: string,
   lastCharacterName: string,
   stashId: number,
@@ -13,26 +10,7 @@ const addStash = (
   isPublic: boolean,
   items: any[],
 ) => {
-  const Stash = mongo.getDb().collection('stashes');
-
-  return Stash.insertOne({ accountName, lastCharacterName, stashId, stashName, stashType, isPublic, items })
-  .then((stash: any) => {
-    return stash;
-  }, (err: Error) => {
-    throw err;
-  });
-};
-
-const updateStash = (
-  accountName: string,
-  lastCharacterName: string,
-  stashId: number,
-  stashName: string,
-  stashType: string,
-  isPublic: boolean,
-  items: any[],
-) => {
-  const Stash = mongo.getDb().collection('stashes');
+  const Stash = database.getDb().collection('stashes');
 
   return Stash.updateOne({ stashId }, { $set: { accountName, lastCharacterName, stashName, stashType, isPublic, items } })
   .then((stash: any) => {
@@ -42,18 +20,8 @@ const updateStash = (
   });
 };
 
-const findStash = (stashId: number) => {
-  const Stash = mongo.getDb().collection('stashes');
-
-  return Stash.find({stashId}, { limit: 1 }).toArray()
-  .then((stash: any) => {
-    if (stash.length > 0) {
-      return stash[0];
-    }
-    return null;
-  }, (err: Error) => {
-    throw err;
-  });
+const stashController = {
+  upsert,
 };
 
-export { addStash, updateStash, findStash };
+export { stashController };

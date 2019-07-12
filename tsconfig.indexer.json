@@ -28,6 +28,11 @@
       "./indexer/types.ts"
     ],
     "outDir": ".build/indexer",
+    "paths": {
+      "@Controller": ["indexer/controllers/*"],
+      "@Collection": ["indexer/collections/*"],
+      "@Lib": ["indexer/lib/*"]
+    }
   },
   "exclude": ["client", "api"]
 }
