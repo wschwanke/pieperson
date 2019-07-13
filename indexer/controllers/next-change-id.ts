@@ -7,7 +7,7 @@ const find = async () => {
   return NextChangeId.findOne({});
 };
 
-const update = async (nextChangeId: PathOfExile.NextChangeId) => {
+const update = async (nextChangeId: string) => {
   const NextChangeId = database.getDb().collection('nextChangeId');
   return NextChangeId.findOneAndReplace({}, { nextChangeId });
 };

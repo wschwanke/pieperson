@@ -100,19 +100,34 @@ class StashIndexer implements IIndexer {
         logger.error(`Being rate limited. Trying again in ${retryTimer}ms.`);
         setTimeout(this.getStashTabsLoop, retryTimer);
       }
-      // logger.error(`getStashTabsLoop - getStashTabs: ${err.response.status}`);
-      // logger.debug(`getStashTabsLoop - getStashTabs: ${err.response}`);
     }
   }
 }
 
+/**
+ * Fetches the current next id from POE Ninja.
+ * @async
+ * @return {Promise} The stashes from the API
+ */
+const getPoeNinjaNextChangeId = async () => {
+  const poeNinjaStatsResponse = await fetch(`https://poe.ninja/api/data/getstats`, {
+    headers: { 'Content-Encoding': 'gzip' },
+  });
+  const poeNinjaStats = await poeNinjaStatsResponse.json();
+  nextChangeIdController.update(poeNinjaStats.next_change_id);
+  return poeNinjaStats.next_change_id;
+};
+
 const getNextChangeId = async () => {
-  let nextChangeId: any[] = [];
+  let nextChangeId: string;
   try {
     // First try and get the next change id from the database
     nextChangeId = await nextChangeIdController.find();
     // If the database fails to return an id then pull it from POE Ninja
-
+    if (nextChangeId === null) {
+      nextChangeId = await getPoeNinjaNextChangeId();
+      nextChangeIdController.update(nextChangeId);
+    }
   } catch (error) {
     logger.error('Could not find next change id');
     logger.error(error);
@@ -141,7 +156,7 @@ process.on('uncaughtException', (error: Error) => {
   logger.error(error);
 });
 
-process.on('SIGTERM', () => {
-  // Disconnect from the database when the application shutsdown
-  database.disconnect();
-});
+// process.on('SIGTERM', () => {
+//   // Disconnect from the database when the application shutsdown
+//   database.disconnect();
+// });
