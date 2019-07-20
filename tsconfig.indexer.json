@@ -29,5 +29,5 @@
     ],
     "outDir": ".build/indexer",
   },
-  "exclude": ["client", "webserver"]
+  "exclude": ["client", "api"]
 }
