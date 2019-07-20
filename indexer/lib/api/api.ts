@@ -23,7 +23,7 @@ const get = async (url: string, options?: any) => {
     ...options,
   });
 
-  const json = await request.json;
+  const json = await request.json();
 
   if (request.ok) {
     return json;

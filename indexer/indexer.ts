@@ -23,7 +23,7 @@ const main = async () => {
   try {
     await database.connect();
     nextChangeId = await poe.getNextChangeId();
-    console.log(nextChangeId);
+    poe.getStashTabsLoop(nextChangeId);
   } catch (err) {
     logger.error(`${err}`);
   }

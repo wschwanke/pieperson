@@ -18,7 +18,8 @@ import { PathOfExile } from '@Types';
  */
 const getStashTabsLoop = async (nextChangeId: string) => {
   try {
-    const stashTabsResponse: any = api.get(`http://api.pathofexile.com/public-stash-tabs?id=${nextChangeId}`);
+    const stashTabsResponse: any = await api.get(`http://api.pathofexile.com/public-stash-tabs?id=${nextChangeId}`);
+
     const stashes = stashTabsResponse.stashes;
 
     const nextId = stashTabsResponse.next_change_id;
@@ -48,10 +49,11 @@ const getNextChangeId = async (): Promise<string> => {
   let shouldAddToDb: boolean = false;
 
   // First try and get the next change id from the database
-  nextChangeId = await nextChangeIdController.find();
+  const nextChangeIdFromDb = await nextChangeIdController.find();
+  nextChangeId = get(nextChangeIdFromDb, 'currentNextChangeId');
 
   // If the database fails to return an id then pull it from POE Ninja
-  if (nextChangeId === null) {
+  if (typeof nextChangeId === undefined || !nextChangeId) {
     // Fetches the next change id from POE Ninja
     const poeNinjaResponse = await api.get('https://poe.ninja/api/data/getstats');
 
@@ -85,6 +87,7 @@ const parseStashes = (publicStashes: PathOfExile.PublicStash[]) => {
 
 const poe = {
   getNextChangeId,
+  getStashTabsLoop,
 };
 
 export { poe };
