@@ -36,5 +36,5 @@
       { "name": "typescript-tslint-plugin" }
     ]
   },
-  "exclude": ["webserver", "indexer"]
+  "exclude": ["api", "indexer"]
 }
