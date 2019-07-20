@@ -1,6 +1,12 @@
-// import { logger } from '../lib/logger';
+/**
+ * Internal dependencies
+ */
 import { database } from '@Lib/database';
-import { PathOfExile } from '@Types';
+
+const insert = async (nextChangeId: string) => {
+  const NextChangeId = database.getDb().collection('nextChangeId');
+  return NextChangeId.insertOne({ currentNextChangeId: nextChangeId });
+};
 
 const find = async () => {
   const NextChangeId = database.getDb().collection('nextChangeId');
@@ -13,6 +19,7 @@ const update = async (nextChangeId: string) => {
 };
 
 const nextChangeIdController = {
+  insert,
   find,
   update,
 };

@@ -1,8 +1,4 @@
 export namespace PathOfExile {
-  export interface NextChangeId {
-    nextChangeId: string;
-  }
-
   export interface PublicStash {
     id: string;
     accountName: string | null;
