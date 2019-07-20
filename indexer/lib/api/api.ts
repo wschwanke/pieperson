@@ -1,4 +1,9 @@
 /**
+ * External dependencies
+ */
+import fetch from 'isomorphic-fetch';
+
+/**
  * API library
  */
 

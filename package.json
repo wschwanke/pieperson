@@ -24,6 +24,7 @@
     "indexer:start": "ts-node --typeCheck --project ./tsconfig.indexer.json ./indexer/indexer.ts",
     "indexer:build": "tsc --build ./tsconfig.indexer.json ./indexer/indexer.ts",
     "indexer:dev": "TS_NODE_PROJECT=indexer/tsconfig.json ts-node-dev -P indexer/tsconfig.json -r tsconfig-paths/register --respawn ./indexer/indexer.ts",
+    "indexer:dev-w": "set TS_NODE_PROJECT=indexer/tsconfig.json&&ts-node-dev -P indexer/tsconfig.json -r tsconfig-paths/register --respawn ./indexer/indexer.ts",
     "build": "yarn run webserver:build && yarn run client:build",
     "start": "node ./.build/webserver/server.js"
   },

@@ -2,7 +2,6 @@
  * External dependencies
  */
 import { config } from 'dotenv';
-import 'isomorphic-fetch';
 
 // Initialize our environment variables with dotenv
 config({ path: 'indexer/env/.env' });
@@ -12,17 +11,19 @@ config({ path: 'indexer/env/.env' });
  */
 import { database } from '@Lib/database';
 import { logger } from '@Lib/logger';
+import { poe } from '@Lib/poe';
 
 /**
  * Main function that initially connects to the database and
  * then boots up the indexer loop.
  */
 const main = async () => {
+  let nextChangeId = '';
+
   try {
     await database.connect();
-    getNextChangeId();
-    const Indexer = new StashIndexer();
-    Indexer.init();
+    nextChangeId = await poe.getNextChangeId();
+    console.log(nextChangeId);
   } catch (err) {
     logger.error(`${err}`);
   }
