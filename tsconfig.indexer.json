@@ -22,17 +22,5 @@
     "skipLibCheck": true,
     "strictNullChecks": false,
     "suppressImplicitAnyIndexErrors": false,
-    "baseUrl": ".",
-    "typeRoots": [
-      "../node_modules/@types",
-      "./indexer/types.ts"
-    ],
-    "outDir": ".build/indexer",
-    "paths": {
-      "@Controller": ["indexer/controllers/*"],
-      "@Collection": ["indexer/collections/*"],
-      "@Lib": ["indexer/lib/*"]
-    }
-  },
-  "exclude": ["client", "api"]
+  }
 }
