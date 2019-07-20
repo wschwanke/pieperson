@@ -22,7 +22,7 @@
     "skipLibCheck": true,
     "strictNullChecks": false,
     "suppressImplicitAnyIndexErrors": false,
-    "baseUrl": "./webserver",
+    "baseUrl": "./api",
     "typeRoots": [
       "../node_modules/@types",
       "./types.ts"
