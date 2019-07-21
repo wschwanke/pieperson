@@ -15,19 +15,23 @@ import { PathOfExile } from '@Types';
 /**
  * Handles calling the fetch for all the stash tabs and then handles the call to parse the fetched data
  * @async
+ * @param {string} nextChangeId - The currency next change id from path of exile
+ * @param {number} interval - The interval at which the Path of Exile API is queried
  */
-const getStashTabsLoop = async (nextChangeId: string) => {
+const getStashTabsLoop = async (nextChangeId: string, interval: number = 10000) => {
   try {
     const stashTabsResponse: any = await api.get(`http://api.pathofexile.com/public-stash-tabs?id=${nextChangeId}`);
 
     const stashes = stashTabsResponse.stashes;
-
     const nextId = stashTabsResponse.next_change_id;
+
     logger.silly(`Fetched ${stashes.length} stash tabs. Next ID is ${nextId}`);
-    await parseStashes(stashes);
+
+    parseStashes(stashes);
+
     setTimeout(() => {
       getStashTabsLoop(nextId);
-    }, 10000);
+    }, interval);
   } catch (err) {
     // getStashTabs Error
     logger.error(err);
@@ -74,15 +78,19 @@ const getNextChangeId = async (): Promise<string> => {
   return nextChangeId;
 };
 
-const parseStashes = (publicStashes: PathOfExile.PublicStash[]) => {
+const parseStashes = async (publicStashes: PathOfExile.PublicStash[]) => {
   const currentLeague = 'Legion';
 
-  // Loop through all stash tabs
-  forEach(publicStashes, (stash) => {
-    // we do nothing for now
-  });
-
-  return publicStashes;
+  try {
+    // Loop through all stash tabs
+    forEach(publicStashes, async (stash) => {
+      if (stash.league === currentLeague && stash.public) {
+        stashController.updateMany(stash);
+      }
+    });
+  } catch (error) {
+    logger.error(error);
+  }
 };
 
 const poe = {

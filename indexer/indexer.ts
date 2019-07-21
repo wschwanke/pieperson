@@ -32,11 +32,14 @@ const main = async () => {
 // Start the indexer
 main();
 
-process.on('uncaughtException', (error: Error) => {
-  logger.error(error);
+process.on('uncaughtException', (error) => {
+  logger.error('Uncaught Exception: ', error.message);
+  logger.error(error.stack!);
+  database.disconnect();
+  process.exit(1);
 });
 
-// process.on('SIGTERM', () => {
-//   // Disconnect from the database when the application shutsdown
-//   database.disconnect();
-// });
+process.on('SIGTERM', () => {
+  logger.info('Indexer is shutting down.');
+  database.disconnect();
+});
