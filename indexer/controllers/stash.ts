@@ -1,16 +1,23 @@
 /**
+ * External dependencies
+ */
+import { forEach } from 'lodash';
+
+/**
  * Internal dependencies
  */
 import { database } from '@Lib/database';
 import { logger } from '@Lib/logger';
 import { PathOfExile } from '@Types';
 
-const updateMany = async (stash: PathOfExile.PublicStash) => {
+const bulkUpdate = async (stashes: PathOfExile.PublicStash[]) => {
   try {
-    const Stash = database.getDb().collection('stash');
-    const { id, ...rest } = stash;
+    const BulkStash = database.getDb().collection('stash').initializeUnorderedBulkOp();
 
-    const updatedStash = await Stash.updateOne({ stashId: id }, { $set: { stashId: id, ...rest } }, { upsert: true });
+    forEach(stashes, (stash) => {
+      BulkStash.find({ stashId: stash.stashId }).upsert().updateOne(stash);
+    });
+    const results = await BulkStash.execute();
   } catch (error) {
     logger.error('Failed to upcert stash tab into collection.');
     logger.error(error);
@@ -18,7 +25,7 @@ const updateMany = async (stash: PathOfExile.PublicStash) => {
 };
 
 const stashController = {
-  updateMany,
+  bulkUpdate,
 };
 
 export { stashController };

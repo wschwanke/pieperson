@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import { forEach, get } from 'lodash';
+import { filter, forEach, get } from 'lodash';
 
 /**
  * Internal dependencies
@@ -78,16 +78,24 @@ const getNextChangeId = async (): Promise<string> => {
   return nextChangeId;
 };
 
-const parseStashes = async (publicStashes: PathOfExile.PublicStash[]) => {
+const parseStashes = async (publicStashes: PathOfExile.PublicStashOriginal[]) => {
   const currentLeague = 'Legion';
+  const filteredStashes: PathOfExile.PublicStash[] = [];
+
+  // Loop through all stash tabs
+  forEach(publicStashes, async (stash) => {
+    if (stash.league === currentLeague) {
+      const { id, ...rest } = stash;
+
+      filteredStashes.push({
+        stashId: id,
+        ...rest,
+      });
+    }
+  });
 
   try {
-    // Loop through all stash tabs
-    forEach(publicStashes, async (stash) => {
-      if (stash.league === currentLeague && stash.public) {
-        stashController.updateMany(stash);
-      }
-    });
+    stashController.bulkUpdate(filteredStashes);
   } catch (error) {
     logger.error(error);
   }
