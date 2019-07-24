@@ -42,10 +42,12 @@ const getStashTabsLoop = async (nextChangeId: string, timeoutInterval: number = 
     const response = get(error, 'response');
     const status = get(error, 'status');
 
+    // If there is a Fetch error then response will be undefined
     if (typeof response !== 'undefined') {
       logger.error(error.response);
     }
 
+    // Same issue here, if a Fetch error occurs status wont be defined
     if (typeof status !== 'undefined' && status === 429) {
       const retryTimer = parseInt(error.response.headers['x-rate-limit-ip'].split(':')[2], 10) * 1000;
       logger.error(`Being rate limited. Trying again in ${retryTimer}ms.`);
