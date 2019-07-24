@@ -18,18 +18,23 @@ const get = async (url: string, options?: any) => {
     headers: { 'Content-Encoding': 'gzip' },
   };
 
-  const request = await fetch(url, {
-    ...fetchOptions,
-    ...options,
-  });
+  try {
+    const request = await fetch(url, {
+      ...fetchOptions,
+      ...options,
+    });
 
-  const json = await request.json();
+    const json = await request.json();
 
-  if (request.ok) {
-    return json;
-  } else {
-    throw json;
+    if (request.ok) {
+      return json;
+    } else {
+      throw json;
+    }
+  } catch (error) {
+    throw error;
   }
+
 };
 
 const api = {

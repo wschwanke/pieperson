@@ -1,6 +1,7 @@
 export namespace PathOfExile {
   export interface Response {
-
+    next_change_id: string;
+    stashes: PublicStashOriginal[];
   }
 
   export interface PublicStashOriginal {

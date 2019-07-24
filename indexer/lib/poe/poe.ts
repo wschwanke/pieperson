@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import { filter, forEach, get } from 'lodash';
+import { forEach, get } from 'lodash';
 
 /**
  * Internal dependencies
@@ -16,29 +16,44 @@ import { PathOfExile } from '@Types';
  * Handles calling the fetch for all the stash tabs and then handles the call to parse the fetched data
  * @async
  * @param {string} nextChangeId - The currency next change id from path of exile
- * @param {number} interval - The interval at which the Path of Exile API is queried
+ * @param {number} timeoutInterval - The interval at which the Path of Exile API is queried
  */
-const getStashTabsLoop = async (nextChangeId: string, interval: number = 10000) => {
+const getStashTabsLoop = async (nextChangeId: string, timeoutInterval: number = 10000) => {
+  let nextId = '';
+
   try {
-    const stashTabsResponse: any = await api.get(`http://api.pathofexile.com/public-stash-tabs?id=${nextChangeId}`);
+    const stashTabsResponse: PathOfExile.Response = await api.get(`http://api.pathofexile.com/public-stash-tabs?id=${nextChangeId}`);
 
     const stashes = stashTabsResponse.stashes;
-    const nextId = stashTabsResponse.next_change_id;
+    nextId = stashTabsResponse.next_change_id;
 
     logger.silly(`Fetched ${stashes.length} stash tabs. Next ID is ${nextId}`);
+    nextChangeIdController.update(nextId);
 
     parseStashes(stashes);
 
-    setTimeout(() => {
-      getStashTabsLoop(nextId);
-    }, interval);
-  } catch (err) {
+    setTimeout(async () => {
+      getStashTabsLoop(nextId, timeoutInterval);
+    }, timeoutInterval);
+  } catch (error) {
     // getStashTabs Error
-    logger.error(err);
-    if (err.response.status === 429) {
-      const retryTimer = parseInt(err.response.headers['x-rate-limit-ip'].split(':')[2], 10) * 1000;
+    logger.error(error);
+
+    const response = get(error, 'response');
+    const status = get(error, 'status');
+
+    if (typeof response !== 'undefined') {
+      logger.error(error.response);
+    }
+
+    if (typeof status !== 'undefined' && status === 429) {
+      const retryTimer = parseInt(error.response.headers['x-rate-limit-ip'].split(':')[2], 10) * 1000;
       logger.error(`Being rate limited. Trying again in ${retryTimer}ms.`);
       setTimeout(getStashTabsLoop, retryTimer);
+    } else {
+      setTimeout(async () => {
+        getStashTabsLoop(nextId, timeoutInterval);
+      }, timeoutInterval);
     }
   }
 };
@@ -104,6 +119,7 @@ const parseStashes = async (publicStashes: PathOfExile.PublicStashOriginal[]) =>
 const poe = {
   getNextChangeId,
   getStashTabsLoop,
+  parseStashes,
 };
 
 export { poe };

@@ -23,7 +23,7 @@ const main = async () => {
   try {
     await database.connect();
     nextChangeId = await poe.getNextChangeId();
-    poe.getStashTabsLoop(nextChangeId);
+    poe.getStashTabsLoop(nextChangeId, 2000);
   } catch (err) {
     logger.error(`${err}`);
   }
@@ -39,7 +39,7 @@ process.on('uncaughtException', (error) => {
   process.exit(1);
 });
 
-process.on('SIGTERM', () => {
-  logger.info('Indexer is shutting down.');
-  database.disconnect();
-});
+// process.on('SIGTERM', () => {
+//   logger.info('Indexer is shutting down.');
+//   database.disconnect();
+// });
