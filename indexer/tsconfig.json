@@ -1,35 +1,19 @@
 {
+  "extends": "../tsconfig.indexer.json",
   "compilerOptions": {
-    "allowUnreachableCode": true,
-    "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
-    "target": "esnext",
-    "downlevelIteration": true,
-    "importHelpers": true,
-    "sourceMap": true,
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "allowJs": false,
-    "checkJs": false,
-    "forceConsistentCasingInFileNames": true,
-    "experimentalDecorators": true,
-    "noImplicitAny": true,
-    "noUnusedParameters": true,
-    "noImplicitReturns": true,
-    "noImplicitThis": true,
-    "noUnusedLocals": true,
-    "skipLibCheck": true,
-    "strictNullChecks": true,
-    "suppressImplicitAnyIndexErrors": false,
-    "outDir": "../.compiled/indexer",
-    "baseUrl": ".",
-  },
-  "include": [
-    "./**/*.ts",
-    "./**/*.tsx",
-    "./**/*.types.ts"
-  ],
-  "exclude": [
-    "node_modules",
-  ]
+    "outDir": "../.build/indexer",                        /* Redirect output structure to the directory. */
+    "rootDir": ".",                       /* Specify the root directory of input files. Use to control the output directory structure with --outDir. */
+    /* Module Resolution Options */
+    "moduleResolution": "node",            /* Specify module resolution strategy: 'node' (Node.js) or 'classic' (TypeScript pre-1.6). */
+    "baseUrl": "./",                       /* Base directory to resolve non-absolute module names. */
+    "paths": {
+      "@Lib/*": ["./lib/*"],
+      "@Controllers/*": ["./controllers/*"],
+      "@Collections/*": ["./collections/*"],
+      "@Types": ["./types.ts"]
+    },                           /* A series of entries which re-map imports to lookup locations relative to the 'baseUrl'. */
+    "typeRoots": [
+      "./node_modules/@types"
+    ],                       /* List of folders to include type definitions from. */
+  }
 }
