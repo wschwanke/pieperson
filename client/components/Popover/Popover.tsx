@@ -10,6 +10,7 @@ import React from 'react';
 interface Props extends React.HTMLProps<HTMLButtonElement> {
   placement: string;
   text: string;
+  type: string;
 }
 
 const Popover: React.FunctionComponent<Props> = ({ text }) => {

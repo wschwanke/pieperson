@@ -12,10 +12,10 @@ interface Props extends React.HTMLProps<HTMLProgressElement> {
   width: string;
 }
 
-const Progress: React.FunctionComponent<Props> = ({  }) => {
+const Progress: React.FunctionComponent<Props> = ({ width, value }) => {
   return (
     <div className="progress">
-      <div className="progress-bar" style="width: 25%" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+      <div className="progress-bar" style="width: ${width}%" role="progressbar" aria-valuenow="${value}" aria-valuemin="${value}" aria-valuemax="100" />
     </div>
   );
 };

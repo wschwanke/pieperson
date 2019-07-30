@@ -14,12 +14,12 @@ interface Props extends React.HTMLProps<HTMLInputElement> {
 
 const Input: React.FunctionComponent = ({ children }) => {
   return (
-    // <div className="input-group mb-3">
-    //   <div className="input-group-prepend">
-    //     <span className="input-group-text" id="basic-addon1">{label}</span>
-    //   </div>
-    //   <input {type} className="form-control" {placeholder} aria-label="Username" aria-describedby="basic-addon1">
-    // </div>
+    <div className="input-group mb-3">
+      <div className="input-group-prepend">
+        <span className="input-group-text" id="basic-addon1">{label}</span>
+      </div>
+      <input {type} className="form-control" {placeholder} aria-label="Username" aria-describedby="basic-addon1" />
+    </div>
   );
 };
 
