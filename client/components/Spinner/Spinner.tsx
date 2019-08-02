@@ -8,15 +8,15 @@ import React from 'react';
  */
 
 interface Props extends React.HTMLProps<HTMLSpinnerElement> {
-  color: string;
   text: string;
   role: string;
+  name: string;
 }
 
-const Spinner: React.FunctionComponent<Props> = ({ text }) => {
+const Spinner: React.FunctionComponent<Props> = ({ text, role, name }) => {
   return (
-    <div className="spinner-border" role="status">
-      <span className="sr-only">{text}</span>
+    <div className={name} role={role}>
+      <span className={name}>{text}</span>
     </div>
   );
 };
