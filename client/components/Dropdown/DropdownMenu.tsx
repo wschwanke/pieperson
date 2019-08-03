@@ -2,7 +2,7 @@
  * External dependencies
  */
 import classNames from 'classnames';
-import React from "react";
+import React from 'react';
 
 /**
  * Internal dependencies
